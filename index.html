@@ -64,6 +64,13 @@
       font-family:monospace;
     }
 
+    /* Logo-SVG */
+    .logo svg.logo-icon{
+      height:42px;
+      width:auto;
+      display:block;
+    }
+
     /* Logo-Bild (PNG oder SVG) */
     .logo img{
       height:42px;
@@ -480,7 +487,16 @@
 <div class="container">
 <header>
 <a href="#" class="logo" aria-label="HauxFacility Home">
-  <img src="/assets/logo-hauxfacility.png" alt="HauxFacility Logo">
+  <svg class="logo-icon" viewBox="0 0 64 64" aria-hidden="true">
+    <path
+      d="M12 30 L32 12 L52 30 V54 H38 V36 H26 V54 H12 Z"
+      fill="none"
+      stroke="#0a84ff"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
   <span>HauxFacility</span>
 </a>
 <nav aria-label="Hauptnavigation">
