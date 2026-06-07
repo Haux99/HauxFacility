@@ -3,741 +3,1026 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HauxFacility — Ganzheitliches Immobilienmanagement</title>
-<meta name="description" content="HauxFacility – Ein Ansprechpartner. Ein Anruf. Alles erledigt. Ganzheitliches Immobilienmanagement für Eigentümer, Hausverwaltungen und Unternehmen." />
-<!-- Google Font: Inter -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<title>HAUX Facility Management — Professionelles Gebäudemanagement</title>
+<meta name="description" content="HAUX Facility Management – Zentral gesteuert. Transparent dokumentiert. Wirtschaftlich optimiert." />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-    :root{
-      --bg:#ffffff;
-      --muted:#6b7280;
-      --accent:#0b1226;
-      --primary:#0a84ff;
-      --card:#f8fafc;
-      --radius:14px;
-      --maxw:1100px;
-      --shadow: 0 6px 30px rgba(12,20,35,0.08);
-      --ease: cubic-bezier(.2,.9,.3,1);
-    }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color:var(--accent);
-      background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.45;
-      -webkit-text-size-adjust:100%;
-    }
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --blue:   #1a6ef5;
+  --blue-d: #1254cc;
+  --ink:    #0a0f1e;
+  --ink-2:  #3d4a5c;
+  --ink-3:  #8896a8;
+  --line:   rgba(10,15,30,.07);
+  --bg:     #ffffff;
+  --soft:   #f5f7fa;
+  --dark:   #07101f;
+  --r:      16px;
+  --r-lg:   28px;
+  --ease:   cubic-bezier(.22,1,.36,1);
+  --max:    1120px;
+}
 
-    .container{
-      max-width:var(--maxw);
-      margin:0 auto;
-      padding:48px 24px;
-    }
+/* ── RESET ───────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Inter",system-ui,sans-serif;color:var(--ink);
+  background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
+h1,h2,h3,h4{margin:0;letter-spacing:-.025em;line-height:1.08}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+ul{list-style:none;padding:0;margin:0}
+img{display:block;max-width:100%}
 
-    header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:28px;
-    }
+/* ── LAYOUT ──────────────────────────────────────────── */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
 
-    .logo{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-weight:950;
-      color:var(--accent);
-      text-decoration:none;
-    }
+/* ── NAV ─────────────────────────────────────────────── */
+.nav-outer{
+  position:sticky;top:0;z-index:200;
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  max-width:var(--max);margin:0 auto;padding:0 32px;
+  height:60px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;letter-spacing:-.02em}
+.nav-logo .mark{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),#38b6ff);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:13px;
+  box-shadow:0 4px 14px rgba(26,110,245,.28);
+}
+.nav-logo img{height:34px;width:auto}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links a{
+  font-size:14px;font-weight:500;color:var(--ink-2);
+  padding:6px 12px;border-radius:8px;transition:color .15s,background .15s;
+}
+.nav-links a:hover{color:var(--ink);background:var(--soft)}
+.nav-btn{
+  background:var(--blue);color:#fff;
+  padding:8px 18px;border-radius:999px;
+  font-size:14px;font-weight:700;
+  box-shadow:0 6px 22px rgba(26,110,245,.28);
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease),background .15s;
+  white-space:nowrap;
+}
+.nav-btn:hover{background:var(--blue-d);transform:translateY(-1px);box-shadow:0 10px 30px rgba(26,110,245,.36)}
 
-    .logo .mark{
-      width:42px;height:42px;border-radius:10px;
-      background:linear-gradient(135deg,#0a84ff,#00c2ff);
-      display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:900;
-      box-shadow: 0 6px 18px rgba(10,132,255,0.18);
-      font-family:monospace;
-    }
+/* ── HERO ────────────────────────────────────────────── */
+.hero{
+  padding:112px 32px 0;
+  background:linear-gradient(160deg,#ffffff 0%,#eef4ff 55%,#e8f0fe 100%);
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(26,110,245,.10) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 0%,transparent 80%);
+  pointer-events:none;
+}
+.hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto}
 
-    /* Logo-SVG */
-    .logo svg.logo-icon{
-      height:42px;
-      width:auto;
-      display:block;
-    }
+/* hero image showcase */
+.hero-images{
+  position:relative;z-index:1;
+  max-width:var(--max);margin:0 auto;
+  padding:48px 0 0;
+  display:grid;grid-template-columns:1.1fr 0.9fr 1fr;gap:14px;
+  align-items:end;
+}
+.hi{
+  border-radius:20px 20px 0 0;overflow:hidden;
+  box-shadow:0 -8px 40px rgba(10,15,30,.12);
+  position:relative;
+}
+.hi img{width:100%;height:100%;object-fit:cover;display:block}
+.hi:nth-child(1),.hi:nth-child(2),.hi:nth-child(3){height:260px}
+.hi-label{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:20px 16px 14px;
+  background:linear-gradient(to top,rgba(7,16,31,.72) 0%,transparent 100%);
+  color:#fff;font-size:12px;font-weight:700;
+  letter-spacing:.04em;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(26,110,245,.08);border:1px solid rgba(26,110,245,.18);
+  color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 14px;border-radius:999px;margin-bottom:28px;
+}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);opacity:.7}
+.hero h1{
+  font-size:clamp(44px,7vw,80px);
+  font-weight:900;color:var(--ink);
+  line-height:1.01;margin-bottom:22px;
+}
+.hero h1 em{color:var(--blue);font-style:normal}
+.hero-lead{
+  font-size:clamp(16px,2vw,20px);color:var(--ink-2);
+  line-height:1.6;max-width:600px;margin:0 auto 40px;
+}
+.hero-actions{
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:64px;
+}
+.btn-main{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--blue);color:#fff;
+  padding:15px 28px;border-radius:14px;
+  font-size:16px;font-weight:700;
+  box-shadow:0 10px 36px rgba(26,110,245,.28);
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .15s;
+}
+.btn-main:hover{background:var(--blue-d);transform:translateY(-3px);box-shadow:0 18px 50px rgba(26,110,245,.36)}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.7);color:var(--ink);
+  border:1px solid rgba(10,15,30,.12);
+  padding:15px 24px;border-radius:14px;
+  font-size:16px;font-weight:600;
+  backdrop-filter:blur(8px);
+  transition:transform .2s var(--ease),background .15s,border-color .15s;
+}
+.btn-outline:hover{background:white;transform:translateY(-2px);border-color:rgba(10,15,30,.2)}
 
-    /* Logo-Bild (PNG oder SVG) */
-    .logo img{
-      height:42px;
-      width:auto;
-      display:block;
-    }
+/* stats row */
+.hero-stats{
+  display:flex;justify-content:center;gap:0;
+  border-top:1px solid rgba(10,15,30,.08);
+  padding-top:40px;
+}
+.stat{
+  flex:1;max-width:220px;padding:0 32px;
+  border-right:1px solid rgba(10,15,30,.08);
+}
+.stat:last-child{border-right:none}
+.stat-num{
+  font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-.03em;
+  color:var(--ink);margin-bottom:4px;
+}
+.stat-num span{color:var(--blue)}
+.stat-label{font-size:13px;color:var(--ink-3);font-weight:500}
 
-    nav{display:flex;gap:18px;align-items:center}
-    nav a{
-      color:var(--muted);
-      text-decoration:none;
-      font-weight:600;
-      padding:10px;
-      border-radius:10px;
-    }
-    nav a:hover{color:var(--accent);}
+/* ── USP STRIP ───────────────────────────────────────── */
+.usp{padding:80px 32px;background:var(--bg)}
+.usp-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;
+}
+.usp-card{
+  display:flex;flex-direction:column;gap:14px;
+  padding:36px 28px;border-radius:var(--r-lg);
+  border:1px solid var(--line);
+  background:var(--bg);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s;
+}
+.usp-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(10,15,30,.09);border-color:rgba(26,110,245,.2)}
+.usp-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(26,110,245,.10),rgba(26,110,245,.04));
+  border:1px solid rgba(26,110,245,.12);
+  display:flex;align-items:center;justify-content:center;
+}
+.usp-icon svg{width:24px;height:24px}
+.usp-card h3{font-size:19px;font-weight:800}
+.usp-card p{font-size:15px;color:var(--ink-2);line-height:1.65}
 
-    .cta{
-      background:var(--primary);
-      color:white;
-      padding:10px 16px;
-      border-radius:999px;
-      font-weight:700;
-      text-decoration:none;
-      box-shadow: 0 10px 30px rgba(10,132,255,0.16);
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      white-space:nowrap;
-    }
+/* ── SECTION HEADER ─────────────────────────────────── */
+.sh{margin-bottom:60px;text-align:center}
+.sh .label{
+  display:inline-block;font-size:11px;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--blue);
+  margin-bottom:14px;
+}
+.sh h2{font-size:clamp(30px,4vw,48px);font-weight:900;margin-bottom:14px}
+.sh p{font-size:17px;color:var(--ink-2);max-width:560px;margin:0 auto;line-height:1.65}
 
-    .cta span.icon{
-      font-size:18px;
-      line-height:1;
-    }
+/* ── LEISTUNGEN — Apple-feature-rows ────────────────── */
+.services{padding:96px 32px;background:var(--soft)}
 
-    .hero{
-      display:grid;
-      grid-template-columns: 1fr 460px;
-      gap:48px;
-      align-items:center;
-      margin-bottom:64px;
-      position:relative;
-    }
+.feature-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:64px;align-items:center;
+  max-width:var(--max);margin:0 auto 96px;
+}
+.feature-row:last-child{margin-bottom:0}
+.feature-row.reverse .feature-visual{order:-1}
 
-    .hero-left h1{
-      margin:0 0 12px 0;
-      font-size:48px;
-      line-height:1.02;
-      letter-spacing:-0.02em;
-      font-weight:800;
-    }
+.feature-visual{
+  border-radius:var(--r-lg);overflow:hidden;
+  min-height:380px;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:28px;gap:12px;
+  position:relative;background:var(--dark);
+}
+.feature-visual img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;
+  transition:transform .6s var(--ease);
+}
+.feature-visual:hover img{transform:scale(1.03)}
+.feature-visual::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(7,16,31,.82) 0%,rgba(7,16,31,.15) 60%,transparent 100%);
+  pointer-events:none;
+}
+.feature-chips{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1}
+.fchip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.8);font-size:12px;font-weight:600;
+  padding:5px 11px;border-radius:999px;backdrop-filter:blur(6px);
+}
+.fchip.active{background:rgba(26,110,245,.35);border-color:rgba(26,110,245,.5);color:#93c5fd}
+.feature-visual-title{
+  font-size:22px;font-weight:800;color:#fff;
+  position:relative;z-index:1;line-height:1.2;
+}
 
-    .hero-left p.lead{
-      color:var(--muted);
-      font-size:18px;
-      margin:0 0 24px 0;
-      max-width:680px;
-    }
+.feature-text{display:flex;flex-direction:column;gap:18px}
+.ft-num{
+  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)
+}
+.feature-text h3{font-size:clamp(24px,3vw,32px);font-weight:900}
+.ft-tagline{font-size:15px;font-weight:700;color:var(--blue);font-style:italic}
+.feature-text p{font-size:16px;color:var(--ink-2);line-height:1.7}
+.ft-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.ft-item{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:14px;color:var(--ink-2);
+}
+.ft-check{
+  width:20px;height:20px;border-radius:6px;flex-shrink:0;margin-top:1px;
+  background:rgba(26,110,245,.1);color:var(--blue);
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;
+}
 
-    .hero-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:14px;
-      align-items:center;
-    }
+/* ── MODULES GRID (compact 4-up) ──────────────────────── */
+.modules-section{padding:96px 32px;background:var(--bg)}
+.modules-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  max-width:var(--max);margin:0 auto;
+}
+.mc{
+  background:var(--soft);border-radius:var(--r);
+  padding:24px 20px;
+  border:1px solid var(--line);
+  display:flex;flex-direction:column;gap:8px;
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s,background .22s;
+  cursor:default;
+}
+.mc:hover{
+  transform:translateY(-5px);
+  box-shadow:0 16px 50px rgba(10,15,30,.09);
+  border-color:rgba(26,110,245,.2);
+  background:white;
+}
+.mc-num{
+  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--blue);opacity:.7;
+}
+.mc h4{font-size:15px;font-weight:800;line-height:1.3}
+.mc-tagline{font-size:12px;font-weight:600;color:var(--blue);font-style:italic;line-height:1.4}
+.mc p{font-size:13px;color:var(--ink-2);line-height:1.6;margin-top:2px}
 
-    .btn{
-      padding:14px 18px;
-      border-radius:12px;
-      font-weight:700;
-      border:0;
-      cursor:pointer;
-      transition:transform .18s var(--ease), box-shadow .18s var(--ease), background .18s;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-    }
+/* ── INTERVALLE — dark cinematic ────────────────────── */
+.intervals{
+  padding:96px 32px;
+  background:var(--dark);color:#fff;
+  position:relative;overflow:hidden;
+}
+.intervals::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 50% 80% at 90% 50%,rgba(26,110,245,.15) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 10% 80%,rgba(56,182,255,.08) 0%,transparent 60%);
+  pointer-events:none;
+}
+.intervals::after{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;
+}
+.intervals .wrap{position:relative;z-index:1}
+.intervals .sh h2{color:#fff}
+.intervals .sh p{color:rgba(255,255,255,.5)}
+.intervals .sh .label{color:#60a5fa}
 
-    .btn.primary{
-      background:var(--primary);
-      color:white;
-      box-shadow:0 12px 30px rgba(10,132,255,0.16);
-    }
+.int-table{
+  width:100%;border-collapse:separate;border-spacing:0 6px;
+}
+.int-table thead th{
+  padding:0 20px 12px;text-align:left;
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);border-bottom:1px solid rgba(255,255,255,.08);
+}
+.int-row td{
+  padding:18px 20px;background:rgba(255,255,255,.04);
+  font-size:15px;color:rgba(255,255,255,.78);
+  transition:background .15s;
+}
+.int-row:hover td{background:rgba(26,110,245,.1)}
+.int-row td:first-child{border-radius:12px 0 0 12px;font-weight:700;color:#fff}
+.int-row td:last-child{border-radius:0 12px 12px 0;font-size:13px;color:rgba(255,255,255,.45)}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;
+}
+.b-blue{background:rgba(26,110,245,.18);color:#60a5fa;border:1px solid rgba(26,110,245,.28)}
+.b-green{background:rgba(52,211,153,.13);color:#6ee7b7;border:1px solid rgba(52,211,153,.22)}
+.b-amber{background:rgba(251,191,36,.10);color:#fcd34d;border:1px solid rgba(251,191,36,.18)}
+.b-violet{background:rgba(167,139,250,.10);color:#c4b5fd;border:1px solid rgba(167,139,250,.18)}
 
-    .btn.primary:hover{
-      transform:translateY(-2px);
-      box-shadow:0 16px 40px rgba(10,132,255,0.22);
-    }
+/* ── PRICING ─────────────────────────────────────────── */
+.pricing{padding:96px 32px;background:var(--soft)}
 
-    .btn.ghost{
-      background:transparent;
-      border:1px solid rgba(12,20,35,0.08);
-      color:var(--accent);
-    }
+.pricing-layout{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:1.15fr 1fr;gap:28px;
+}
 
-    .hero-card{
-      background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(250,250,250,0.9));
-      border-radius:var(--radius);
-      padding:20px;
-      box-shadow:var(--shadow);
-      border:1px solid rgba(12,20,35,0.03);
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      align-items:stretch;
-    }
+.price-hero{
+  background:var(--dark);border-radius:var(--r-lg);
+  padding:44px;color:#fff;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:28px;
+}
+.price-hero::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 90% 0%,rgba(26,110,245,.22) 0%,transparent 65%);
+  pointer-events:none;
+}
+.price-hero>*{position:relative;z-index:1}
+.ph-label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa}
+.ph-amount{
+  font-size:clamp(48px,6vw,68px);font-weight:900;letter-spacing:-.04em;line-height:1;
+  color:#fff;
+}
+.ph-amount sup{font-size:.4em;vertical-align:top;margin-top:.25em;font-weight:700}
+.ph-amount .period{font-size:18px;font-weight:400;color:rgba(255,255,255,.4);margin-left:4px}
+.ph-sub{font-size:15px;color:rgba(255,255,255,.5);line-height:1.6;max-width:340px}
+.ph-includes{display:flex;flex-direction:column;gap:10px}
+.ph-row{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,.7)}
+.ph-tick{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;
+  background:rgba(52,211,153,.18);color:#34d399;
+  display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;
+}
+.ph-cta{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--blue);color:#fff;
+  padding:14px 24px;border-radius:12px;
+  font-weight:700;font-size:15px;width:fit-content;
+  box-shadow:0 8px 28px rgba(26,110,245,.35);
+  transition:transform .2s var(--ease),box-shadow .2s,background .15s;
+}
+.ph-cta:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 14px 40px rgba(26,110,245,.42)}
 
-    .hc-row{display:flex;align-items:center;justify-content:space-between}
-    .hc-title{font-weight:700}
-    .hc-sub{color:var(--muted);font-size:14px}
-    .mini-list{display:flex;flex-direction:column;gap:8px}
-    .chip{
-      background:rgba(10,132,255,0.06);
-      padding:8px 10px;
-      border-radius:10px;
-      font-weight:600;
-      color:var(--primary);
-      display:inline-block;
-      font-size:13px;
-    }
+.price-cards{display:flex;flex-direction:column;gap:16px}
+.pc{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:24px 22px;display:flex;flex-direction:column;gap:6px;
+  transition:border-color .2s,box-shadow .2s,transform .2s var(--ease);
+}
+.pc:hover{border-color:rgba(26,110,245,.25);box-shadow:0 8px 30px rgba(10,15,30,.07);transform:translateY(-2px)}
+.pc-label{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.pc-value{font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-.02em}
+.pc-value.ok{color:#059669}
+.pc-value.amber{color:#b45309}
+.pc p{font-size:13px;color:var(--ink-2);line-height:1.55}
+.pricing-note{
+  max-width:var(--max);margin:20px auto 0;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 20px;font-size:13px;color:var(--ink-2);line-height:1.55;
+}
 
-    .features{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:18px;
-      margin-bottom:48px
-    }
-    .feature{
-      background:transparent;
-      border-radius:12px;
-      padding:18px;
-      display:flex;
-      gap:14px;
-      align-items:flex-start;
-    }
-    .feature svg{flex:0 0 44px;height:44px}
-    .feature h4{margin:0;font-size:16px}
-    .feature p{margin:6px 0 0 0;color:var(--muted);font-size:14px}
+/* ── BENEFITS ────────────────────────────────────────── */
+.benefits{padding:96px 32px;background:var(--bg)}
+.benefits-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+  max-width:var(--max);margin:0 auto;
+}
+.bc{
+  padding:28px 22px;border-radius:var(--r-lg);
+  border:1px solid var(--line);background:var(--soft);
+  display:flex;flex-direction:column;gap:12px;
+  transition:transform .22s var(--ease),box-shadow .22s,border-color .22s,background .22s;
+}
+.bc:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(10,15,30,.09);border-color:rgba(26,110,245,.2);background:#fff}
+.bc-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(26,110,245,.1),rgba(26,110,245,.04));
+  border:1px solid rgba(26,110,245,.1);
+  display:flex;align-items:center;justify-content:center;
+}
+.bc-icon svg{width:22px;height:22px}
+.bc h3{font-size:16px;font-weight:800}
+.bc p{font-size:14px;color:var(--ink-2);line-height:1.65}
 
-    /* Apple-inspirierte Servicepakete */
-    .pricing{
-      margin:42px 0;
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap:24px;
-      align-items:stretch;
-    }
+/* ── PHILOSOPHY / CTA BAND ───────────────────────────── */
+.band{
+  padding:96px 32px;
+  background:linear-gradient(160deg,#07101f 0%,#0d1c3a 100%);
+  color:#fff;text-align:center;position:relative;overflow:hidden;
+}
+.band::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(26,110,245,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.band::after{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;
+}
+.band-inner{position:relative;z-index:1;max-width:680px;margin:0 auto}
+.band-eyebrow{
+  display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:#60a5fa;margin-bottom:18px;
+}
+.band h2{
+  font-size:clamp(34px,5vw,54px);font-weight:900;color:#fff;margin-bottom:16px;
+}
+.band p{font-size:17px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:36px}
+.band-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--blue);color:#fff;
+  padding:16px 32px;border-radius:14px;
+  font-size:17px;font-weight:800;
+  box-shadow:0 12px 40px rgba(26,110,245,.4);
+  transition:transform .2s var(--ease),box-shadow .2s,background .15s;
+}
+.band-cta:hover{background:var(--blue-d);transform:translateY(-3px);box-shadow:0 20px 60px rgba(26,110,245,.5)}
 
-    .card{
-      position:relative;
-      background:radial-gradient(circle at top, #f9fbff 0%, #ffffff 55%, #f3f4f6 100%);
-      border-radius:24px;
-      padding:26px 22px;
-      border:1px solid rgba(148,163,184,0.35);
-      box-shadow:0 18px 45px rgba(15,23,42,0.08);
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-      overflow:hidden;
-      transition:
-        transform .26s var(--ease),
-        box-shadow .26s var(--ease),
-        border-color .26s var(--ease),
-        background .26s var(--ease);
-    }
+/* ── CONTACT ─────────────────────────────────────────── */
+.contact{padding:96px 32px;background:var(--soft)}
+.contact-grid{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:start;
+}
+.contact-card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:40px;box-shadow:0 8px 40px rgba(10,15,30,.06);
+}
+.contact-card h2{font-size:30px;font-weight:900;margin-bottom:10px}
+.contact-card>p{font-size:15px;color:var(--ink-2);line-height:1.65;margin-bottom:28px}
+.cc-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px 24px;border-radius:14px;
+  background:var(--blue);color:#fff;
+  font-size:16px;font-weight:800;
+  box-shadow:0 10px 36px rgba(26,110,245,.28);
+  transition:transform .2s var(--ease),box-shadow .2s,background .15s;
+}
+.cc-btn:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 16px 48px rgba(26,110,245,.38)}
+.cc-meta{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.cc-row{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-2)}
+.cc-ic{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:rgba(26,110,245,.08);color:var(--blue);
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+.contact-aside{display:flex;flex-direction:column;gap:16px}
+.ca-card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:24px;
+}
+.ca-card h4{font-size:15px;font-weight:800;margin-bottom:14px}
+.ca-list li{
+  display:flex;gap:8px;padding:7px 0;
+  border-bottom:1px solid var(--line);font-size:14px;color:var(--ink-2);
+}
+.ca-list li:last-child{border-bottom:none}
+.ca-dot{color:var(--blue);font-weight:700;flex-shrink:0;margin-top:2px}
 
-    /* leichter “Glow”-Rand */
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      border-radius:inherit;
-      pointer-events:none;
-      background:radial-gradient(circle at top, rgba(59,130,246,0.14), transparent 60%);
-      opacity:0;
-      transition:opacity .26s var(--ease);
-      z-index:0;
-    }
+/* ── FOOTER ──────────────────────────────────────────── */
+footer{
+  background:var(--dark);color:#fff;
+  padding:44px 32px 32px;
+}
+.foot-inner{max-width:var(--max);margin:0 auto}
+.foot-top{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:24px;padding-bottom:28px;margin-bottom:24px;
+  border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap;
+}
+.foot-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;color:#fff}
+.foot-sub{font-size:12px;color:rgba(255,255,255,.35);margin-top:3px}
+.foot-nav{display:flex;gap:20px;flex-wrap:wrap}
+.foot-nav a{font-size:13px;color:rgba(255,255,255,.38);transition:color .15s}
+.foot-nav a:hover{color:rgba(255,255,255,.75)}
+.foot-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;
+}
+.foot-copy{font-size:12px;color:rgba(255,255,255,.28)}
+.foot-mail a{font-size:12px;color:rgba(255,255,255,.35);transition:color .15s}
+.foot-mail a:hover{color:rgba(255,255,255,.7)}
 
-    .card > *{
-      position:relative;
-      z-index:1;
-    }
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media(max-width:980px){
+  .hero-stats{flex-wrap:wrap}
+  .stat{border-right:none;border-bottom:1px solid rgba(10,15,30,.08);padding:16px 24px}
+  .stat:last-child{border-bottom:none}
+  .usp-grid{grid-template-columns:1fr}
+  .feature-row{grid-template-columns:1fr;gap:32px}
+  .feature-row.reverse .feature-visual{order:0}
+  .modules-grid{grid-template-columns:repeat(2,1fr)}
+  .pricing-layout{grid-template-columns:1fr}
+  .benefits-grid{grid-template-columns:repeat(2,1fr)}
+  .contact-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  .hero{padding:80px 18px 0}
+  .hero-actions{flex-direction:column;align-items:center}
+  .btn-main,.btn-outline{width:100%;justify-content:center}
+  .hero-images{grid-template-columns:1fr 1fr;padding:32px 18px 0}
+  .hi:nth-child(3){display:none}
+  .hi:nth-child(1){height:200px}
+  .hi:nth-child(2){height:160px}
+  .modules-grid{grid-template-columns:1fr}
+  .benefits-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .int-table thead th:last-child,.int-row td:last-child{display:none}
+  .foot-top{flex-direction:column;align-items:flex-start}
+}
 
-    .card:hover{
-      transform:translateY(-8px) scale(1.02);
-      box-shadow:0 28px 70px rgba(15,23,42,0.22);
-      border-color:rgba(37,99,235,0.45);
-      background:radial-gradient(circle at top, #f5f7ff 0%, #ffffff 55%, #eef2ff 100%);
-    }
+/* ── SCROLL ANIMATION ─────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:.08s}
+.reveal-delay-2{transition-delay:.16s}
+.reveal-delay-3{transition-delay:.24s}
+.reveal-delay-4{transition-delay:.32s}
 
-    .card:hover::before{
-      opacity:1;
-    }
-
-    /* mittleres Paket dezent hervorheben */
-    .pricing .card:nth-child(2){
-      transform:translateY(-6px);
-      box-shadow:0 26px 65px rgba(15,23,42,0.18);
-      border-color:rgba(37,99,235,0.35);
-    }
-
-    .pricing .card:nth-child(2):hover{
-      transform:translateY(-10px) scale(1.03);
-    }
-
-    .card-header-label{
-      font-size:11px;
-      letter-spacing:0.16em;
-      text-transform:uppercase;
-      color:var(--muted);
-      font-weight:700;
-      margin-bottom:4px;
-    }
-
-    .card-title-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:8px;
-    }
-
-    .card-title{
-      font-size:20px;
-      font-weight:800;
-    }
-
-    .card-pill{
-      padding:4px 10px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.04);
-      color:var(--muted);
-      font-size:11px;
-      font-weight:600;
-      white-space:nowrap;
-    }
-
-    .card ul{
-      margin:4px 0 0;
-      padding:0;
-      list-style:none;
-      color:var(--muted);
-      font-size:14px;
-    }
-    .card li{
-      padding:8px 0;
-      border-top:1px dashed rgba(148,163,184,0.35);
-      display:flex;
-      gap:6px;
-    }
-    .card li::before{
-      content:"•";
-      color:var(--primary);
-      margin-right:2px;
-    }
-
-    .addons{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
-    .addon{
-      background:var(--card);
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid rgba(12,20,35,0.03);
-      font-weight:600;
-      color:var(--accent);
-      font-size:13px;
-    }
-
-    .testimonials{
-      margin-top:24px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-    .testimonial{
-      background:linear-gradient(180deg,#fff,#f9fbff);
-      padding:18px;
-      border-radius:12px;
-      border:1px solid rgba(12,20,35,0.03);
-      box-shadow:var(--shadow);
-    }
-
-    /* Kontaktbereich mit großem Button */
-    .contact-section{
-      margin-top:48px;
-      display:grid;
-      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
-      gap:28px;
-      align-items:center;
-    }
-
-    .contact-card{
-      background:white;
-      padding:24px;
-      border-radius:18px;
-      border:1px solid rgba(12,20,35,0.04);
-      box-shadow:0 16px 50px rgba(12,20,35,0.06);
-    }
-
-    .big-mail-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding:18px 28px;
-      border-radius:999px;
-      background:var(--primary);
-      color:white;
-      text-decoration:none;
-      font-weight:800;
-      font-size:18px;
-      box-shadow:0 18px 45px rgba(10,132,255,0.28);
-      margin-top:18px;
-      transition:transform .18s var(--ease), box-shadow .18s var(--ease), background .18s;
-    }
-
-    .big-mail-btn span.icon{
-      font-size:22px;
-      line-height:1;
-    }
-
-    .big-mail-btn:hover{
-      transform:translateY(-3px);
-      box-shadow:0 22px 60px rgba(10,132,255,0.35);
-      background:#0a7aea;
-    }
-
-    .contact-meta{
-      color:var(--muted);
-      font-size:14px;
-      margin-top:12px;
-    }
-
-    .contact-aside-box{
-      background:linear-gradient(180deg,#fff,#fbfdff);
-      padding:20px;
-      border-radius:16px;
-      border:1px solid rgba(12,20,35,0.03);
-      box-shadow:var(--shadow);
-    }
-
-    .foot{
-      margin-top:38px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      color:var(--muted);
-      font-size:13px;
-      flex-wrap:wrap;
-      gap:12px;
-    }
-
-    @media (max-width:980px){
-      .hero{grid-template-columns:1fr;gap:28px}
-      .features{grid-template-columns:1fr;gap:12px}
-      .pricing{grid-template-columns:1fr}
-      .contact-section{grid-template-columns:1fr;gap:18px}
-      header{padding-bottom:8px}
-    }
-
-    /* Zusätzliche Optimierung für Smartphones */
-    @media (max-width:640px){
-      .container{
-        padding:32px 16px;
-      }
-
-      header{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:10px;
-      }
-
-      nav{
-        flex-wrap:wrap;
-        gap:10px;
-      }
-
-      nav a{
-        padding:6px 8px;
-        font-size:14px;
-      }
-
-      .cta{
-        padding:8px 14px;
-        font-size:14px;
-      }
-
-      .hero-left h1{
-        font-size:32px;
-      }
-
-      .hero-left p.lead{
-        font-size:16px;
-      }
-
-      .logo img{
-        height:34px;
-      }
-
-      .big-mail-btn{
-        width:100%;
-        font-size:16px;
-        padding:14px 20px;
-      }
-    }
-
-    .muted{color:var(--muted)}
-    footer small{color:var(--muted)}
-    a.no-style{text-decoration:none;color:inherit}
 </style>
 </head>
 <body>
-<div class="container">
-<header>
-<a href="#" class="logo" aria-label="HauxFacility Home">
-  <img src="assets/assets:logo-hauxfacility.png" alt="HauxFacility Logo">
-  <span>HauxFacility</span>
-</a>
-<nav aria-label="Hauptnavigation">
-  <a href="#services">Leistungen</a>
-  <a href="#pricing">Preise</a>
-  <a href="#trust">Vertrauen</a>
-  <a href="#contact">Kontakt</a>
-  <!-- Header-Button ist direkt mailto -->
-  <a href="mailto:info@hauxfacility.de?subject=Anfrage%20Beratungsgespräch%20HauxFacility" class="cta">
-    <span class="icon">✉️</span>
-    Kostenloses Beratungsgespräch
-  </a>
-</nav>
-</header>
+
+<!-- NAV -->
+<div class="nav-outer">
+  <nav aria-label="Hauptnavigation">
+    <a href="#" class="nav-logo" aria-label="HAUX Facility Management">
+      <img src="assets/assets:logo-hauxfacility.png" alt="HAUX" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="mark" style="display:none">H</div>
+      <span>HAUX<span style="font-weight:400;opacity:.55"> Facility</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#leistungen">Leistungen</a>
+      <a href="#intervalle">Intervalle</a>
+      <a href="#preise">Preise</a>
+      <a href="#vorteile">Vorteile</a>
+      <a href="#kontakt" class="nav-btn">Anfrage stellen</a>
+    </div>
+  </nav>
+</div>
 
 <!-- HERO -->
-<section class="hero" aria-labelledby="hero-heading">
-<div class="hero-left">
-<h1 id="hero-heading">Ein Ansprechpartner. Ein Anruf. <br>Alles erledigt.</h1>
-<p class="lead">HauxFacility bietet ganzheitliches Immobilienmanagement — Reinigung, Wartung, technische Überwachung und Projektleitung aus einer Hand. Transparenz, Effizienz und messbare Ergebnisse für Eigentümer, Hausverwaltungen und Unternehmen.</p>
-<div class="hero-actions" role="region" aria-label="Hauptaktionen">
-<a class="btn primary" href="mailto:info@hauxfacility.de?subject=Anfrage%20Beratungsgespräch%20HauxFacility">
-  <span>Jetzt per E-Mail anfragen</span>
-  <span class="icon">✉️</span>
-</a>
-<a class="btn ghost" href="#pricing">Pakete ansehen</a>
-</div>
-<div style="margin-top:22px;color:var(--muted);font-size:14px;display:flex;gap:18px;flex-wrap:wrap">
-<span class="chip">24/7 Notfallservice</span>
-<span class="chip">Digitale Objektberichte</span>
-<span class="chip">Projektleitung & Sanierung</span>
-</div>
-</div>
-<aside class="hero-card" aria-label="Schnellübersicht Leistungen">
-<div class="hc-row">
-<div>
-<div class="hc-title">Schnellübersicht</div>
-<div class="hc-sub">Individuelle Betreuung & transparente Reports</div>
-</div>
-</div>
-<div class="mini-list">
-<div style="display:flex;justify-content:space-between">
-<div class="muted">Monatliche Objektkontrolle</div><div style="font-weight:700">✔</div>
-</div>
-<div style="display:flex;justify-content:space-between">
-<div class="muted">24/7 Notfallruf</div><div style="font-weight:700">✔</div>
-</div>
-<div style="display:flex;justify-content:space-between">
-<div class="muted">Projektleitung & Sanierungen</div><div style="font-weight:700">✔</div>
-</div>
-</div>
-<div style="display:flex;gap:10px;margin-top:6px;align-items:center">
-<img src="https://www.flaticon.com/de/download/icon/126496?icon_id=126496&author=141&team=141&keyword=haus&pack=126466&style=1&style_id=908&format=png&color=%23000000&colored=1&size=512&selection=1&type=standard" alt="" style="width:56px;height:56px;border-radius:10px;object-fit:cover">
-<div style="flex:1">
-<div style="font-weight:700">Objekt-Check</div>
-<div class="muted" style="font-size:13px">Schnelle Erstaufnahme mit Foto & Bericht</div>
-</div>
-</div>
-</aside>
-</section>
-
-<!-- Features -->
-<section id="services" aria-labelledby="services-heading">
-<div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:18px">
-<h2 id="services-heading" style="margin:0">Warum HauxFacility?</h2>
-<div class="muted" style="font-size:14px">Zuverlässig. Transparent. Effizient.</div>
-</div>
-<div class="features" role="list">
-<div class="feature" role="listitem">
-<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-<path d="M3 12h18" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M3 6h18" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M3 18h18" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-<div>
-<h4>Alles aus einer Hand</h4>
-<p>Koordination von Reinigung, Wartung, Handwerkern und Verwaltung — eine zentrale Anlaufstelle.</p>
-</div>
-</div>
-<div class="feature" role="listitem">
-<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-<circle cx="12" cy="7" r="3" stroke="#0a84ff" stroke-width="1.6"/>
-<path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-<div>
-<h4>Digital & Effizient</h4>
-<p>Digitale Berichte, Terminplanung und transparente Rechnungslegung — alles nachvollziehbar.</p>
-</div>
-</div>
-<div class="feature" role="listitem">
-<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-<path d="M12 2v6" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M5 20h14" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round"/>
-<path d="M4 12h16" stroke="#0a84ff" stroke-width="1.6" stroke-linecap="round"/>
-</svg>
-<div>
-<h4>Mehr Zeit, weniger Aufwand</h4>
-<p>Sie konzentrieren sich auf Ihr Geschäft — wir kümmern uns um den Rest.</p>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Pricing -->
-<section id="pricing" aria-labelledby="pricing-heading">
-<h2 id="pricing-heading">Unsere Servicepakete</h2>
-<p class="muted">Wählen Sie das Paket, das zu Größe und Bedarf Ihrer Immobilie passt.</p>
-<div class="pricing" role="list">
-  <div class="card" role="listitem" aria-label="Basic Paket">
-    <div class="card-header-label">BASIC</div>
-    <div class="card-title-row">
-      <div class="card-title">Solide Grundbetreuung</div>
-      <div class="card-pill">Für kleinere Objekte</div>
-    </div>
-    <ul>
-      <li>Wöchentliche Objektkontrolle</li>
-      <li>Kleinreparaturen bis 30 Min.</li>
-      <li>Basisreinigung (Eingang, Müllplatz)</li>
-      <li>Koordination externer Dienstleister</li>
-      <li>Fotodokumentation</li>
-    </ul>
-  </div>
-
-  <div class="card" role="listitem" aria-label="Comfort Paket">
-    <div class="card-header-label">COMFORT</div>
-    <div class="card-title-row">
-      <div class="card-title">Rundum-Service</div>
-      <div class="card-pill">Beliebteste Wahl</div>
-    </div>
-    <ul>
-      <li>Alle BASIC-Leistungen</li>
-      <li>Regelmäßige Innen- & Außenreinigung</li>
-      <li>Winterdienst & Grünpflege</li>
-      <li>24h-Notfallruf</li>
-      <li>Monatlicher Kurzbericht</li>
-    </ul>
-  </div>
-
-  <div class="card" role="listitem" aria-label="Premium Paket">
-    <div class="card-header-label">PREMIUM</div>
-    <div class="card-title-row">
-      <div class="card-title">360° Immobilienmanagement</div>
-      <div class="card-pill">Maximaler Umfang</div>
-    </div>
-    <ul>
-      <li>Alle COMFORT-Leistungen</li>
-      <li>Technische Objektüberwachung</li>
-      <li>Wartungsverträge & Terminplanung</li>
-      <li>Projektleitung & Sanierungen</li>
-      <li>Versicherungsschäden & Abwicklung</li>
-    </ul>
-  </div>
-</div>
-
-<div style="margin-top:18px">
-<div class="muted">Zusatzleistungen:</div>
-<div class="addons">
-<div class="addon">24/7 Notfallservice</div>
-<div class="addon">Objektaufnahme</div>
-<div class="addon">Subkoordination</div>
-<div class="addon">Projektleitung Sanierung</div>
-</div>
-</div>
-</section>
-
-<!-- Trust / Testimonials -->
-<section id="trust" aria-labelledby="trust-heading" style="margin-top:20px">
-<h2 id="trust-heading">Vertrauen & Professionalität</h2>
-<p class="muted">Unsere Kunden schätzen die klare Kommunikation, die transparente Abrechnung und die zuverlässigen Ergebnisse.</p>
-<div class="testimonials">
-<div class="testimonial">
-<strong>Hans M., Immobilienverwaltung</strong>
-<p class="muted" style="margin:6px 0 0 0">„HauxFacility hat uns bei mehreren Sanierungsprojekten entlastet — von der Angebotseinholung bis zur Abnahme. Sehr professionell.“</p>
-</div>
-<div class="testimonial">
-<strong>Anna K., Eigentümerin</strong>
-<p class="muted" style="margin:6px 0 0 0">„Endlich ein Dienstleister, der wirklich alles koordiniert. Die digitalen Berichte sind super praktisch.“</p>
-</div>
-</div>
-</section>
-
-<!-- CONTACT SECTION – nur ein großer Button -->
-<section id="contact" aria-labelledby="contact-heading" style="margin-top:36px">
-<h2 id="contact-heading">Kontakt & Anfrage</h2>
-<div class="contact-section">
-  <div class="contact-card">
-    <h3 style="margin-top:0;margin-bottom:6px;">Kostenloses Erstgespräch anfragen</h3>
-    <p class="muted" style="margin-top:0;margin-bottom:10px;">
-      Schreiben Sie uns eine kurze E-Mail mit Ihrem Anliegen, der Objektart und – falls möglich – der Adresse.
-      Wir melden uns in der Regel innerhalb von 24 Stunden.
+<section class="hero" aria-labelledby="hero-h1">
+  <div class="hero-inner">
+    <div class="hero-tag"><span class="dot"></span>Gebäudemanagement</div>
+    <h1 id="hero-h1">Ihr Gebäude.<br><em>Vollständig im Griff.</em></h1>
+    <p class="hero-lead">
+      Zentral gesteuert. Transparent dokumentiert. Wirtschaftlich optimiert.<br>
+      Volle Kontrolle — ohne dass Sie sich selbst darum kümmern müssen.
     </p>
-    <a class="big-mail-btn" href="mailto:info@hauxfacility.de?subject=Anfrage%20HauxFacility%20Immobilienmanagement">
-      <span class="icon">✉️</span>
-      <span>Anfrage senden</span>
-    </a>
-    <div class="contact-meta">
-      📍 Übach-Palenberg • Deutschland
+    <div class="hero-actions">
+      <a class="btn-main" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Kostenloses Erstgespräch
+      </a>
+      <a class="btn-outline" href="#leistungen">
+        Leistungen entdecken
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
     </div>
   </div>
-  <aside class="contact-aside-box">
-    <h4 style="margin-top:0">Was Sie uns senden können</h4>
-    <ul style="list-style:none;padding:0;margin:0;color:var(--muted);font-size:14px;">
-      <li style="padding:4px 0;">• Kurzbeschreibung der Immobilie</li>
-      <li style="padding:4px 0;">• Anzahl Einheiten / Fläche</li>
-      <li style="padding:4px 0;">• Aktuelle Herausforderungen (z.B. Reinigung, Handwerkerkoordination)</li>
-      <li style="padding:4px 0;">• Ihre Kontaktdaten für Rückfragen</li>
-    </ul>
-  </aside>
-</div>
+
+  <!-- Hero Image Showcase -->
+  <div class="hero-images">
+    <div class="hi">
+      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Modernes Bürogebäude" loading="lazy">
+      <div class="hi-label">Gewerbeobjekte & Bürokomplexe</div>
+    </div>
+    <div class="hi">
+      <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80" alt="Immobilienverwaltung" loading="lazy">
+      <div class="hi-label">Wohnimmobilien & Anlagen</div>
+    </div>
+    <div class="hi">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Modernes Gebäudeinnere" loading="lazy">
+      <div class="hi-label">Lobby, Technik & Infrastruktur</div>
+    </div>
+  </div>
 </section>
 
-<footer style="margin-top:48px;border-top:1px solid rgba(12,20,35,0.03);padding-top:18px">
-<div class="container" style="max-width:var(--maxw);padding:0">
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-<div style="display:flex;gap:12px;align-items:center">
-<span class="mark" style="width:36px;height:36px;border-radius:8px"></span>
-<div>
-<div style="font-weight:700">HauxFacility</div>
-<small class="muted">Ihr Partner für ganzheitliches Immobilienmanagement</small>
-</div>
-</div>
-<div style="display:flex;gap:12px;align-items:center">
-<a class="muted" href="#">Impressum</a>
-<a class="muted" href="#">Datenschutz</a>
-<a class="muted" href="#">AGB</a>
-</div>
-</div>
-<div style="margin-top:12px;color:var(--muted);font-size:13px">
-©️ 2025 HauxFacility — Alle Rechte vorbehalten • Kontakt: <a href="mailto:info@hauxfacility.de" class="no-style">info@hauxfacility.de</a>
-</div>
-</div>
+<!-- USP STRIP -->
+<section class="usp" aria-labelledby="usp-h">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div class="label">Warum HAUX</div>
+      <h2 id="usp-h">Drei Versprechen. Gehalten.</h2>
+      <p>Wir betreiben Ihr Gebäude wie ein System — planbar, risikominimiert und transparent.</p>
+    </div>
+    <div class="usp-grid">
+      <div class="usp-card reveal reveal-delay-1">
+        <div class="usp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Ein Ansprechpartner</h3>
+        <p>Zentrale Koordination aller Gebäudethemen, Dienstleister und Maßnahmen. Kein Ping-Pong mehr zwischen Gewerken.</p>
+      </div>
+      <div class="usp-card reveal reveal-delay-2">
+        <div class="usp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h3>Volle Transparenz</h3>
+        <p>Status, Kosten, Fristen und Risiken — jederzeit nachvollziehbar dokumentiert. Monatlicher Management-Report inklusive.</p>
+      </div>
+      <div class="usp-card reveal reveal-delay-3">
+        <div class="usp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Planbarer Betrieb</h3>
+        <p>SLA-gesteuerter Betrieb mit definierten Reaktionszeiten und klarer Verantwortlichkeit auf jeder Ebene.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEISTUNGEN — feature rows -->
+<section id="leistungen" class="services" aria-labelledby="services-h">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div class="label">Leistungsmodule</div>
+      <h2 id="services-h">Was wir für Sie steuern.</h2>
+      <p>Alle Module — klar strukturiert, objektspezifisch anpassbar. Erstmals vollständige Transparenz über die Vorgänge in Ihrem Gebäude.</p>
+    </div>
+  </div>
+
+  <!-- Row 1 -->
+  <div class="feature-row wrap reveal">
+    <div class="feature-visual">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80" alt="Gebäudemanagement vor Ort" loading="lazy">
+      <div class="feature-visual-title">Steuerung & operatives Management</div>
+      <div class="feature-chips">
+        <span class="fchip active">Zentrale Steuerung</span>
+        <span class="fchip active">Dienstleister</span>
+        <span class="fchip">Wartung</span>
+        <span class="fchip">Störungen</span>
+      </div>
+    </div>
+    <div class="feature-text">
+      <div class="ft-num">Module 01 – 04</div>
+      <h3>Alles läuft — auch wenn Sie nicht da sind.</h3>
+      <p class="ft-tagline">Ein Ansprechpartner. Alle Themen. Klare Abläufe.</p>
+      <p>Zentraler Ansprechpartner für Eigentümer, Verwaltung und Nutzer. Wir koordinieren alle Gewerke, steuern externe Dienstleister, erfassen Störungen zentral und sorgen für lückenlose Prüf- und Wartungskalender.</p>
+      <div class="ft-list">
+        <div class="ft-item"><div class="ft-check">✓</div><span>Zentrale Gebäude-Steuerung mit transparenter Priorisierung</span></div>
+        <div class="ft-item"><div class="ft-check">✓</div><span>Dienstleister-Management: Angebotsvergleich, Qualitätskontrolle, Eskalation</span></div>
+        <div class="ft-item"><div class="ft-check">✓</div><span>Wartungskalender für Brandschutz, Aufzug, Elektro, Heizung, Lüftung</span></div>
+        <div class="ft-item"><div class="ft-check">✓</div><span>Ticket- & Störungsmanagement mit Reaktionszeitenüberwachung</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="feature-row reverse wrap reveal" style="margin-top:80px">
+    <div class="feature-text">
+      <div class="ft-num">Module 05 – 08</div>
+      <h3>Sehen, was wirklich passiert.</h3>
+      <p class="ft-tagline">Klare Daten. Fundierte Entscheidungen. Minimierte Risiken.</p>
+      <p>Regelmäßige Objektbegehungen mit Fotodokumentation, ein verdichteter monatlicher Management-Report und strukturiertes Risikomanagement sorgen dafür, dass Sie immer den Überblick behalten — und Probleme erkannt werden, bevor sie teuer werden.</p>
+      <div class="ft-list">
+        <div class="ft-item"><div class="ft-check">✓</div><span>Objektbegehungen mit Fotodokumentation & Mängelliste</span></div>
+        <div class="ft-item"><div class="ft-check">✓</div><span>Monatlicher Report: Leistungsübersicht, Ticketstatus, Kosten</span></div>
+        <div class="ft-item"><div class="ft-check">✓</div><span>Betreiberpflichten & Risikomanagement — Haftung systematisch reduziert</span></div>
+        <div class="ft-item"><div class="ft-check">✓</div><span>Kostenkontrolle: Rechnungsprüfung & Einsparpotenziale</span></div>
+      </div>
+    </div>
+    <div class="feature-visual">
+      <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=900&q=80" alt="Modernes Wohngebäude" loading="lazy">
+      <div class="feature-visual-title">Transparenz, Reporting & Risiko</div>
+      <div class="feature-chips">
+        <span class="fchip">Begehungen</span>
+        <span class="fchip active">Monatsreport</span>
+        <span class="fchip active">Risikomanagement</span>
+        <span class="fchip">Kostenkontrolle</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES COMPACT GRID -->
+<section class="modules-section" aria-label="Alle 8 Leistungsmodule">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div class="label">Alle Module</div>
+      <h2>8 Module. Ein System.</h2>
+      <p>Objektspezifisch kombinierbar — wir definieren gemeinsam, was Ihr Gebäude braucht.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="mc reveal reveal-delay-1">
+        <div class="mc-num">01</div>
+        <h4>Zentrale Gebäude-Steuerung</h4>
+        <div class="mc-tagline">Ein Ansprechpartner. Alle Themen.</div>
+        <p>Koordination aller Gewerke und externer Dienstleister mit transparenter Priorisierung.</p>
+      </div>
+      <div class="mc reveal reveal-delay-2">
+        <div class="mc-num">02</div>
+        <h4>Dienstleister- & Gewerke-Management</h4>
+        <div class="mc-tagline">Qualität sichern. Aufwand reduzieren.</div>
+        <p>Angebotseinholung, Qualitätskontrolle, Dokumentation und Eskalation bei Minderleistung.</p>
+      </div>
+      <div class="mc reveal reveal-delay-3">
+        <div class="mc-num">03</div>
+        <h4>Wartungs- & Prüfmanagement</h4>
+        <div class="mc-tagline">Termine nie verpassen. Pflichten erfüllen.</div>
+        <p>Prüfkalender für Brandschutz, Aufzug, Elektro, Heizung und Lüftung. Lückenlose Protokollablage.</p>
+      </div>
+      <div class="mc reveal reveal-delay-4">
+        <div class="mc-num">04</div>
+        <h4>Ticket- & Störungsmanagement</h4>
+        <div class="mc-tagline">Keine verlorenen Vorgänge.</div>
+        <p>Zentrale Störungserfassung, Behebungskoordination und Überwachung der Reaktionszeiten.</p>
+      </div>
+      <div class="mc reveal reveal-delay-1">
+        <div class="mc-num">05</div>
+        <h4>Objektbegehungen & Qualitätskontrolle</h4>
+        <div class="mc-tagline">Proaktiv statt reaktiv.</div>
+        <p>Regelmäßige Begehungen mit Fotodokumentation und frühzeitiger Risikoidentifikation.</p>
+      </div>
+      <div class="mc reveal reveal-delay-2">
+        <div class="mc-num">06</div>
+        <h4>Monatsreport & Transparenz</h4>
+        <div class="mc-tagline">Klare Daten. Fundierte Entscheidungen.</div>
+        <p>Verdichteter Report mit Leistungsübersicht, Ticketstatus, Kosten und Dienstleisterbewertung.</p>
+      </div>
+      <div class="mc reveal reveal-delay-3">
+        <div class="mc-num">07</div>
+        <h4>Betreiberpflichten- & Risikomanagement</h4>
+        <div class="mc-tagline">Haftungsrisiken systematisch minimieren.</div>
+        <p>Gesetzliche Anforderungen, Nachweisdokumentation und frühzeitige Eskalation kritischer Sachverhalte.</p>
+      </div>
+      <div class="mc reveal reveal-delay-4">
+        <div class="mc-num">08</div>
+        <h4>Kostenkontrolle & Optimierung</h4>
+        <div class="mc-tagline">Wirtschaftlich. Nachvollziehbar.</div>
+        <p>Rechnungsprüfung, Angebotsvergleich und Identifikation von Einsparpotenzialen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERVALLE -->
+<section id="intervalle" class="intervals" aria-labelledby="int-h">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div class="label">Leistungsintervalle</div>
+      <h2 id="int-h">Strukturiert. Planbar. Verlässlich.</h2>
+      <p>Jede Leistung mit definierten Intervallen — damit nichts vergessen wird und Sie immer wissen, was wann passiert.</p>
+    </div>
+    <table class="int-table reveal" role="table" aria-label="Leistungsintervalle">
+      <thead>
+        <tr>
+          <th scope="col" style="width:36%">Leistung</th>
+          <th scope="col" style="width:20%">Intervall</th>
+          <th scope="col">Beispielhafte Ausprägung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="int-row">
+          <td>Monatsreport & Statusreview</td>
+          <td><span class="badge b-blue">Monatlich</span></td>
+          <td>Report mit Leistungsübersicht, Ticketstatus und Empfehlungen</td>
+        </tr>
+        <tr class="int-row">
+          <td>Objektbegehung</td>
+          <td><span class="badge b-blue">Monatlich</span></td>
+          <td>Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste</td>
+        </tr>
+        <tr class="int-row">
+          <td>Wartungs- & Prüfmonitoring</td>
+          <td><span class="badge b-green">Laufend</span></td>
+          <td>Fristenkontrolle und Nachverfolgung aller Wartungs- und Prüftermine</td>
+        </tr>
+        <tr class="int-row">
+          <td>Dienstleisterreview</td>
+          <td><span class="badge b-amber">Quartalsweise</span></td>
+          <td>Bewertung Qualität, Preis-Leistung und Zuverlässigkeit</td>
+        </tr>
+        <tr class="int-row">
+          <td>Kosten- & Maßnahmenreview</td>
+          <td><span class="badge b-amber">Quartalsweise</span></td>
+          <td>Analyse Kostentreiber, Einsparpotenziale, geplante Maßnahmen</td>
+        </tr>
+        <tr class="int-row">
+          <td>Jahresübersicht & Planung</td>
+          <td><span class="badge b-violet">Jährlich</span></td>
+          <td>Gesamtauswertung und Vorausplanung für das Folgejahr</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="preise" class="pricing" aria-labelledby="pricing-h">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div class="label">Kostenstruktur</div>
+      <h2 id="pricing-h">Individuelle Lösungen. Transparente Preise.</h2>
+      <p>Wir kalkulieren objektspezifisch — kein starres Paket, sondern exakt das, was Ihr Gebäude braucht.</p>
+    </div>
+    <div class="pricing-layout">
+      <div class="price-hero reveal">
+        <div class="ph-label">Monatliche Managementpauschale</div>
+        <div>
+          <div class="ph-amount"><sup>ab</sup> 1.200 €<span class="period">/Monat</span></div>
+          <p class="ph-sub" style="margin-top:10px">Vollständiges Gebäudemanagement — objektspezifisch kalkuliert. Begehung und Report inklusive.</p>
+        </div>
+        <div class="ph-includes">
+          <div class="ph-row"><div class="ph-tick">✓</div>Alle 8 Leistungsmodule nach Vereinbarung</div>
+          <div class="ph-row"><div class="ph-tick">✓</div>Monatliche Objektbegehung mit Fotodokumentation</div>
+          <div class="ph-row"><div class="ph-tick">✓</div>Monatlicher Management-Report</div>
+          <div class="ph-row"><div class="ph-tick">✓</div>SLA-definierte Reaktionszeiten</div>
+          <div class="ph-row"><div class="ph-tick">✓</div>Zentraler Ansprechpartner für alle Themen</div>
+        </div>
+        <a class="ph-cta" href="mailto:info@hauxfacility.de?subject=Angebot%20HAUX%20Gebäudemanagement">
+          Angebot anfordern
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="price-cards reveal reveal-delay-1">
+        <div class="pc">
+          <div class="pc-label">Inkludiert</div>
+          <div class="pc-value ok">Objektbegehung</div>
+          <p>Regelmäßige Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste — im Preis enthalten.</p>
+        </div>
+        <div class="pc">
+          <div class="pc-label">Inkludiert</div>
+          <div class="pc-value ok">Monatsreport</div>
+          <p>Verdichteter Report mit Leistungsübersicht, Status und konkreten Handlungsempfehlungen.</p>
+        </div>
+        <div class="pc">
+          <div class="pc-label">Nach Bedarf</div>
+          <div class="pc-value amber">Sonderthemen</div>
+          <p>Individuelle Zusatzleistungen werden nach Beauftragung und Absprache nach Aufwand abgerechnet.</p>
+        </div>
+      </div>
+    </div>
+    <p class="pricing-note reveal">
+      <strong>Hinweis:</strong> Fremdleistungen externer Dienstleister (Handwerker, Wartungsunternehmen etc.) sind nicht Bestandteil der Managementpauschale und werden objektbezogen gesondert beauftragt. Alle Preise werden objektspezifisch kalkuliert.
+    </p>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="vorteile" class="benefits" aria-labelledby="ben-h">
+  <div class="wrap">
+    <div class="sh reveal">
+      <div class="label">Was Sie gewinnen</div>
+      <h2 id="ben-h">Ihr Vorteil auf einen Blick.</h2>
+      <p>HAUX bündelt alle Gebäudethemen in einem Modell — damit Sie die volle Kontrolle behalten, ohne sich um operative Details zu kümmern.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="bc reveal reveal-delay-1">
+        <div class="bc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Zeitersparnis</h3>
+        <p>Kein operativer Aufwand mehr auf Ihrer Seite — wir koordinieren alles, von der Erstmeldung bis zur Abnahme.</p>
+      </div>
+      <div class="bc reveal reveal-delay-2">
+        <div class="bc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Kostentransparenz</h3>
+        <p>Nachvollziehbare Kostenkontrolle und wirtschaftlich optimierte Services durch Angebotsvergleich und Rechnungsprüfung.</p>
+      </div>
+      <div class="bc reveal reveal-delay-3">
+        <div class="bc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Rechtssicherheit</h3>
+        <p>Alle Betreiberpflichten werden strukturiert erfüllt und vollständig dokumentiert — Haftungsrisiken systematisch minimiert.</p>
+      </div>
+      <div class="bc reveal reveal-delay-4">
+        <div class="bc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <h3>Proaktiver Betrieb</h3>
+        <p>Probleme werden erkannt, bevor sie teuer werden — durch regelmäßige Begehungen und systematisches Monitoring.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BAND / CTA -->
+<section class="band" aria-label="Call to Action">
+  <div class="band-inner reveal">
+    <div class="band-eyebrow">Unser Leitgedanke</div>
+    <h2>Nicht mehr Ansprechpartner.<br>Ein strukturiertes Management.</h2>
+    <p>Wir professionalisieren und zentralisieren den Gebäudebetrieb — datenbasiert, transparent und SLA-gesteuert. Sie sehen erstmals wirklich, was in Ihrem Gebäude passiert.</p>
+    <a class="band-cta" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Jetzt Erstgespräch anfragen
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="kontakt" class="contact" aria-labelledby="contact-h">
+  <div class="contact-grid">
+    <div class="contact-card reveal">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:10px">Kontakt</div>
+      <h2 id="contact-h">Sprechen Sie mit uns.</h2>
+      <p>Wir stellen Ihnen den Leistungsumfang gerne objektspezifisch zusammen und passen Intervalle, Reportingtiefe und Module an Ihre Anforderungen an.</p>
+      <a class="cc-btn" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Kostenloses Erstgespräch anfragen
+      </a>
+      <div class="cc-meta">
+        <div class="cc-row"><div class="cc-ic">✉</div><a href="mailto:info@hauxfacility.de" style="color:inherit">info@hauxfacility.de</a></div>
+        <div class="cc-row"><div class="cc-ic">⏱</div><span>Antwort in der Regel innerhalb von 24 Stunden</span></div>
+      </div>
+    </div>
+    <div class="contact-aside reveal reveal-delay-1">
+      <div class="ca-card">
+        <h4>Was Sie uns mitteilen können</h4>
+        <ul class="ca-list">
+          <li><span class="ca-dot">→</span><span>Objektart und Lage</span></li>
+          <li><span class="ca-dot">→</span><span>Anzahl Einheiten / Nutzfläche</span></li>
+          <li><span class="ca-dot">→</span><span>Aktuelle Herausforderungen</span></li>
+          <li><span class="ca-dot">→</span><span>Gewünschte Leistungsmodule</span></li>
+          <li><span class="ca-dot">→</span><span>Ihre Kontaktdaten für Rückfragen</span></li>
+        </ul>
+      </div>
+      <div class="ca-card">
+        <h4>Alles ist anpassbar</h4>
+        <p style="font-size:14px;color:var(--ink-2);line-height:1.65">Intervalle, Reportingtiefe und Leistungsmodule werden gemeinsam mit Ihnen definiert — kein starres Paket, sondern exakt das, was Ihr Objekt benötigt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">
+          <div class="mark" style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#1a6ef5,#38b6ff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px">H</div>
+          HAUX Facility Management
+        </div>
+        <div class="foot-sub">Strukturiert · Transparent · Effizient</div>
+      </div>
+      <nav class="foot-nav" aria-label="Footer Navigation">
+        <a href="#leistungen">Leistungen</a>
+        <a href="#intervalle">Intervalle</a>
+        <a href="#preise">Preise</a>
+        <a href="#kontakt">Kontakt</a>
+        <a href="#">Impressum</a>
+        <a href="#">Datenschutz</a>
+        <a href="#">AGB</a>
+      </nav>
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-copy">© 2025 HAUX Facility Management — Alle Rechte vorbehalten</div>
+      <div class="foot-mail"><a href="mailto:info@hauxfacility.de">info@hauxfacility.de</a></div>
+    </div>
+  </div>
 </footer>
-</div>
 
 <script>
-  // Smooth Scrolling für Anker-Links
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', (e)=>{
-      const target = document.querySelector(a.getAttribute('href'));
-      if(target){
-        e.preventDefault();
-        target.scrollIntoView({behavior:'smooth',block:'start'});
-      }
-    });
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
   });
+});
+
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(el => {
+    if(el.isIntersecting){ el.target.classList.add('visible'); io.unobserve(el.target); }
+  });
+}, {threshold: 0.08, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
-
-
-
-
-
