@@ -5,569 +5,455 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>HAUX Facility Management — Professionelles Gebäudemanagement</title>
 <meta name="description" content="HAUX Facility Management – Zentral gesteuert. Transparent dokumentiert. Wirtschaftlich optimiert." />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><path fill-rule="evenodd" fill="%2315171C" d="M48 7 90 34 90 90 6 90 6 34Z M27 44 39 44 39 58 57 58 57 44 69 44 69 82 57 82 57 68 39 68 39 82 27 82Z"/></svg>'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <style>
 
 /* ── TOKENS ─────────────────────────────────────────── */
 :root {
-  --blue:   #1a6ef5;
-  --blue-d: #1254cc;
-  --ink:    #0a0f1e;
-  --ink-2:  #3d4a5c;
-  --ink-3:  #8896a8;
-  --line:   rgba(10,15,30,.07);
-  --bg:     #ffffff;
-  --soft:   #f5f7fa;
-  --dark:   #07101f;
-  --r:      16px;
-  --r-lg:   28px;
-  --ease:   cubic-bezier(.22,1,.36,1);
-  --max:    1120px;
+  --blue:    #1a6ef5;
+  --blue-d:  #1254cc;
+  --blue-ink:#1657c8;          /* deep blue for accents on cream */
+  --ink:     #1a1915;          /* warm near-black */
+  --ink-2:   #55524a;          /* muted body text */
+  --ink-3:   #8d887d;          /* faint / captions */
+  --line:    rgba(26,25,21,.12);
+  --line-2:  rgba(26,25,21,.06);
+  --paper:   #f3f0e9;          /* main ivory background (Anthropic bone) */
+  --paper-2: #fbfaf5;          /* raised cards / panels */
+  --panel:   #ece8dd;          /* alternate / sunken section */
+  --dark:    #14161c;          /* dark sections */
+  --dark-2:  #1c1f28;
+  --r:       10px;
+  --r-lg:    18px;
+  --ease:    cubic-bezier(.22,1,.36,1);
+  --max:     1140px;
+  --serif:   "Newsreader", Georgia, "Times New Roman", serif;
+  --sans:    "Inter", system-ui, -apple-system, sans-serif;
 }
 
 /* ── RESET ───────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:"Inter",system-ui,sans-serif;color:var(--ink);
-  background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
-h1,h2,h3,h4{margin:0;letter-spacing:-.025em;line-height:1.08}
+body{margin:0;font-family:var(--sans);color:var(--ink);
+  background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+h1,h2,h3,h4{margin:0;font-family:var(--serif);font-weight:400;letter-spacing:-.012em;line-height:1.1}
 p{margin:0}
 a{color:inherit;text-decoration:none}
 ul{list-style:none;padding:0;margin:0}
 img{display:block;max-width:100%}
+::selection{background:rgba(26,110,245,.18)}
 
 /* ── LAYOUT ──────────────────────────────────────────── */
-.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 40px}
+
+/* ── SHARED: section eyebrow + heading ───────────────── */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--sans);font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--blue-ink);
+  margin-bottom:18px;
+}
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--blue);opacity:.6}
+
+.sh{margin-bottom:64px;max-width:680px}
+.sh.center{margin-left:auto;margin-right:auto;text-align:center}
+.sh.center .eyebrow::before{display:none}
+.sh h2{font-size:clamp(32px,4.4vw,50px);line-height:1.06;margin-bottom:18px}
+.sh p{font-family:var(--sans);font-size:18px;color:var(--ink-2);line-height:1.6}
+
+/* ── BUTTONS ─────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--sans);font-size:15px;font-weight:600;
+  padding:13px 24px;border-radius:9px;
+  transition:background .18s,color .18s,border-color .18s,transform .18s var(--ease);
+  cursor:pointer;border:1px solid transparent;white-space:nowrap;
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-d);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{background:rgba(26,25,21,.04);border-color:rgba(26,25,21,.28)}
+.btn-light{background:var(--paper-2);color:var(--ink);border-color:var(--line)}
+.btn-light:hover{background:#fff;transform:translateY(-1px)}
 
 /* ── NAV ─────────────────────────────────────────────── */
 .nav-outer{
   position:sticky;top:0;z-index:200;
-  background:rgba(255,255,255,.82);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--line);
+  background:rgba(243,240,233,.78);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom:1px solid var(--line-2);
 }
 .nav{
-  max-width:var(--max);margin:0 auto;padding:0 32px;
-  height:60px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  max-width:var(--max);margin:0 auto;padding:0 40px;
+  height:66px;display:flex;align-items:center;justify-content:space-between;gap:24px;
 }
-.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;letter-spacing:-.02em}
-.nav-logo .mark{
-  width:34px;height:34px;border-radius:9px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--blue),#38b6ff);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-weight:900;font-size:13px;
-  box-shadow:0 4px 14px rgba(26,110,245,.28);
-}
-.nav-logo img{height:34px;width:auto}
-.nav-links{display:flex;align-items:center;gap:2px}
+.nav-logo{display:flex;align-items:center;gap:11px}
+.nav-logo svg{height:30px;width:auto;flex-shrink:0}
+.nav-logo .wm{font-family:var(--sans);font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+.nav-logo .wm span{font-weight:400;color:var(--ink-3)}
+.nav-links{display:flex;align-items:center;gap:4px}
 .nav-links a{
-  font-size:14px;font-weight:500;color:var(--ink-2);
-  padding:6px 12px;border-radius:8px;transition:color .15s,background .15s;
+  font-size:15px;font-weight:500;color:var(--ink-2);
+  padding:8px 14px;border-radius:8px;transition:color .15s,background .15s;
 }
-.nav-links a:hover{color:var(--ink);background:var(--soft)}
-.nav-btn{
-  background:var(--blue);color:#fff;
-  padding:8px 18px;border-radius:999px;
-  font-size:14px;font-weight:700;
-  box-shadow:0 6px 22px rgba(26,110,245,.28);
-  transition:transform .18s var(--ease),box-shadow .18s var(--ease),background .15s;
-  white-space:nowrap;
+.nav-links a:hover{color:var(--ink);background:rgba(26,25,21,.05)}
+.nav-links .nav-cta{
+  background:var(--blue);color:#fff;font-weight:600;padding:9px 18px;margin-left:8px;
+  transition:background .15s,transform .15s var(--ease);
 }
-.nav-btn:hover{background:var(--blue-d);transform:translateY(-1px);box-shadow:0 10px 30px rgba(26,110,245,.36)}
+.nav-links .nav-cta:hover{background:var(--blue-d);transform:translateY(-1px);color:#fff}
 
 /* ── HERO ────────────────────────────────────────────── */
 .hero{
-  padding:112px 32px 0;
-  background:linear-gradient(160deg,#ffffff 0%,#eef4ff 55%,#e8f0fe 100%);
-  position:relative;overflow:hidden;
-  text-align:center;
+  padding:96px 40px 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% -10%,rgba(26,110,245,.07) 0%,transparent 55%),
+    var(--paper);
+  position:relative;
 }
-.hero::before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(26,110,245,.10) 0%,transparent 70%);
-  pointer-events:none;
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero-brand{
+  display:inline-block;
+  font-family:var(--sans);font-weight:700;font-size:14px;
+  letter-spacing:.24em;text-transform:uppercase;
+  color:var(--blue-ink);margin-bottom:28px;
 }
-.hero::after{
-  content:"";position:absolute;inset:0;
-  background-image:
-    linear-gradient(var(--line) 1px,transparent 1px),
-    linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:48px 48px;
-  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 0%,transparent 80%);
-  pointer-events:none;
+.hero h1{
+  font-size:clamp(46px,6.6vw,82px);
+  font-weight:400;color:var(--ink);
+  line-height:1.02;letter-spacing:-.022em;
+  max-width:14ch;margin-bottom:26px;
 }
-.hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto}
+.hero h1 em{font-style:italic;color:var(--blue-ink)}
+.hero-lead{
+  font-family:var(--sans);font-size:clamp(17px,1.9vw,21px);color:var(--ink-2);
+  line-height:1.6;max-width:560px;margin-bottom:40px;
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:80px}
+.hero-actions .btn{padding:15px 28px;font-size:16px}
 
 /* hero image showcase */
 .hero-images{
-  position:relative;z-index:1;
-  max-width:var(--max);margin:0 auto;
-  padding:48px 0 0;
-  display:grid;grid-template-columns:1.1fr 0.9fr 1fr;gap:14px;
-  align-items:end;
+  display:grid;grid-template-columns:1.15fr .92fr 1fr;gap:18px;
+  padding-bottom:96px;
 }
 .hi{
-  border-radius:20px 20px 0 0;overflow:hidden;
-  box-shadow:0 -8px 40px rgba(10,15,30,.12);
-  position:relative;
+  position:relative;border-radius:var(--r-lg);overflow:hidden;
+  border:1px solid var(--line);background:var(--panel);
+  height:300px;box-shadow:0 1px 2px rgba(26,25,21,.05);
 }
-.hi img{width:100%;height:100%;object-fit:cover;display:block}
-.hi:nth-child(1),.hi:nth-child(2),.hi:nth-child(3){height:260px}
+.hi img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.hi:hover img{transform:scale(1.04)}
 .hi-label{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:20px 16px 14px;
-  background:linear-gradient(to top,rgba(7,16,31,.72) 0%,transparent 100%);
-  color:#fff;font-size:12px;font-weight:700;
-  letter-spacing:.04em;
+  position:absolute;bottom:0;left:0;right:0;padding:22px 18px 16px;
+  background:linear-gradient(to top,rgba(15,17,22,.78) 0%,transparent 100%);
+  color:#fff;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.01em;
 }
-.hero-tag{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(26,110,245,.08);border:1px solid rgba(26,110,245,.18);
-  color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  padding:5px 14px;border-radius:999px;margin-bottom:28px;
-}
-.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);opacity:.7}
-.hero h1{
-  font-size:clamp(44px,7vw,80px);
-  font-weight:900;color:var(--ink);
-  line-height:1.01;margin-bottom:22px;
-}
-.hero h1 em{color:var(--blue);font-style:normal}
-.hero-lead{
-  font-size:clamp(16px,2vw,20px);color:var(--ink-2);
-  line-height:1.6;max-width:600px;margin:0 auto 40px;
-}
-.hero-actions{
-  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:64px;
-}
-.btn-main{
-  display:inline-flex;align-items:center;gap:9px;
-  background:var(--blue);color:#fff;
-  padding:15px 28px;border-radius:14px;
-  font-size:16px;font-weight:700;
-  box-shadow:0 10px 36px rgba(26,110,245,.28);
-  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .15s;
-}
-.btn-main:hover{background:var(--blue-d);transform:translateY(-3px);box-shadow:0 18px 50px rgba(26,110,245,.36)}
-.btn-outline{
-  display:inline-flex;align-items:center;gap:9px;
-  background:rgba(255,255,255,.7);color:var(--ink);
-  border:1px solid rgba(10,15,30,.12);
-  padding:15px 24px;border-radius:14px;
-  font-size:16px;font-weight:600;
-  backdrop-filter:blur(8px);
-  transition:transform .2s var(--ease),background .15s,border-color .15s;
-}
-.btn-outline:hover{background:white;transform:translateY(-2px);border-color:rgba(10,15,30,.2)}
 
-/* stats row */
-.hero-stats{
-  display:flex;justify-content:center;gap:0;
-  border-top:1px solid rgba(10,15,30,.08);
-  padding-top:40px;
-}
-.stat{
-  flex:1;max-width:220px;padding:0 32px;
-  border-right:1px solid rgba(10,15,30,.08);
-}
-.stat:last-child{border-right:none}
-.stat-num{
-  font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-.03em;
-  color:var(--ink);margin-bottom:4px;
-}
-.stat-num span{color:var(--blue)}
-.stat-label{font-size:13px;color:var(--ink-3);font-weight:500}
+/* ── SECTION SHELLS ──────────────────────────────────── */
+.section{padding:108px 40px}
+.section.alt{background:var(--panel)}
+.section.dark{background:var(--dark);color:#fff}
 
 /* ── USP STRIP ───────────────────────────────────────── */
-.usp{padding:80px 32px;background:var(--bg)}
 .usp-grid{
   max-width:var(--max);margin:0 auto;
-  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
 }
-.usp-card{
-  display:flex;flex-direction:column;gap:14px;
-  padding:36px 28px;border-radius:var(--r-lg);
-  border:1px solid var(--line);
-  background:var(--bg);
+.card{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:34px 30px;
   transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s;
 }
-.usp-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(10,15,30,.09);border-color:rgba(26,110,245,.2)}
-.usp-icon{
-  width:52px;height:52px;border-radius:14px;
-  background:linear-gradient(135deg,rgba(26,110,245,.10),rgba(26,110,245,.04));
-  border:1px solid rgba(26,110,245,.12);
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(26,25,21,.07);border-color:rgba(26,110,245,.28)}
+.icn{
+  width:46px;height:46px;border-radius:11px;margin-bottom:20px;
+  background:rgba(26,110,245,.08);border:1px solid rgba(26,110,245,.14);
   display:flex;align-items:center;justify-content:center;
 }
-.usp-icon svg{width:24px;height:24px}
-.usp-card h3{font-size:19px;font-weight:800}
-.usp-card p{font-size:15px;color:var(--ink-2);line-height:1.65}
+.icn svg{width:22px;height:22px}
+.card h3{font-size:22px;margin-bottom:10px;letter-spacing:-.01em}
+.card p{font-family:var(--sans);font-size:15.5px;color:var(--ink-2);line-height:1.65}
 
-/* ── SECTION HEADER ─────────────────────────────────── */
-.sh{margin-bottom:60px;text-align:center}
-.sh .label{
-  display:inline-block;font-size:11px;font-weight:800;
-  letter-spacing:.13em;text-transform:uppercase;color:var(--blue);
-  margin-bottom:14px;
-}
-.sh h2{font-size:clamp(30px,4vw,48px);font-weight:900;margin-bottom:14px}
-.sh p{font-size:17px;color:var(--ink-2);max-width:560px;margin:0 auto;line-height:1.65}
-
-/* ── LEISTUNGEN — Apple-feature-rows ────────────────── */
-.services{padding:96px 32px;background:var(--soft)}
-
+/* ── LEISTUNGEN — feature rows ───────────────────────── */
 .feature-row{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:64px;align-items:center;
-  max-width:var(--max);margin:0 auto 96px;
+  display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;
+  max-width:var(--max);margin:0 auto;
 }
-.feature-row:last-child{margin-bottom:0}
+.feature-row + .feature-row{margin-top:104px}
 .feature-row.reverse .feature-visual{order:-1}
 
 .feature-visual{
-  border-radius:var(--r-lg);overflow:hidden;
-  min-height:380px;display:flex;flex-direction:column;
-  justify-content:flex-end;padding:28px;gap:12px;
-  position:relative;background:var(--dark);
+  position:relative;border-radius:var(--r-lg);overflow:hidden;
+  min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:30px;gap:14px;background:var(--dark);border:1px solid var(--line);
 }
 .feature-visual img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;display:block;
-  transition:transform .6s var(--ease);
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform .7s var(--ease);
 }
 .feature-visual:hover img{transform:scale(1.03)}
 .feature-visual::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(7,16,31,.82) 0%,rgba(7,16,31,.15) 60%,transparent 100%);
-  pointer-events:none;
+  background:linear-gradient(to top,rgba(15,17,22,.86) 0%,rgba(15,17,22,.2) 55%,transparent 100%);
+}
+.feature-visual-title{
+  position:relative;z-index:1;font-family:var(--serif);font-size:25px;
+  color:#fff;line-height:1.15;letter-spacing:-.01em;
 }
 .feature-chips{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1}
 .fchip{
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
-  color:rgba(255,255,255,.8);font-size:12px;font-weight:600;
-  padding:5px 11px;border-radius:999px;backdrop-filter:blur(6px);
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);
+  color:rgba(255,255,255,.82);padding:5px 12px;border-radius:999px;
+  backdrop-filter:blur(4px);
 }
-.fchip.active{background:rgba(26,110,245,.35);border-color:rgba(26,110,245,.5);color:#93c5fd}
-.feature-visual-title{
-  font-size:22px;font-weight:800;color:#fff;
-  position:relative;z-index:1;line-height:1.2;
-}
+.fchip.active{background:rgba(26,110,245,.32);border-color:rgba(96,165,250,.5);color:#bfdbfe}
 
-.feature-text{display:flex;flex-direction:column;gap:18px}
-.ft-num{
-  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)
+.feature-text .ft-num{
+  font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--blue-ink);margin-bottom:16px;display:block;
 }
-.feature-text h3{font-size:clamp(24px,3vw,32px);font-weight:900}
-.ft-tagline{font-size:15px;font-weight:700;color:var(--blue);font-style:italic}
-.feature-text p{font-size:16px;color:var(--ink-2);line-height:1.7}
-.ft-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.ft-item{
-  display:flex;align-items:flex-start;gap:10px;
-  font-size:14px;color:var(--ink-2);
-}
+.feature-text h3{font-size:clamp(26px,3vw,36px);line-height:1.1;margin-bottom:14px;letter-spacing:-.015em}
+.ft-tagline{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--blue-ink);margin-bottom:18px}
+.feature-text>p{font-family:var(--sans);font-size:16.5px;color:var(--ink-2);line-height:1.7;margin-bottom:24px}
+.ft-list{display:flex;flex-direction:column;gap:13px}
+.ft-item{display:flex;align-items:flex-start;gap:12px;font-family:var(--sans);font-size:15px;color:var(--ink);line-height:1.5}
 .ft-check{
-  width:20px;height:20px;border-radius:6px;flex-shrink:0;margin-top:1px;
+  width:21px;height:21px;border-radius:6px;flex-shrink:0;margin-top:2px;
   background:rgba(26,110,245,.1);color:var(--blue);
-  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
 }
 
-/* ── MODULES GRID (compact 4-up) ──────────────────────── */
-.modules-section{padding:96px 32px;background:var(--bg)}
+/* ── MODULES GRID (8) ────────────────────────────────── */
 .modules-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
   max-width:var(--max);margin:0 auto;
 }
 .mc{
-  background:var(--soft);border-radius:var(--r);
-  padding:24px 20px;
-  border:1px solid var(--line);
-  display:flex;flex-direction:column;gap:8px;
-  transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s,background .22s;
-  cursor:default;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);
+  padding:26px 22px;display:flex;flex-direction:column;
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s;
 }
-.mc:hover{
-  transform:translateY(-5px);
-  box-shadow:0 16px 50px rgba(10,15,30,.09);
-  border-color:rgba(26,110,245,.2);
-  background:white;
-}
-.mc-num{
-  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--blue);opacity:.7;
-}
-.mc h4{font-size:15px;font-weight:800;line-height:1.3}
-.mc-tagline{font-size:12px;font-weight:600;color:var(--blue);font-style:italic;line-height:1.4}
-.mc p{font-size:13px;color:var(--ink-2);line-height:1.6;margin-top:2px}
+.mc:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(26,25,21,.07);border-color:rgba(26,110,245,.28)}
+.mc-num{font-family:var(--serif);font-size:30px;color:var(--blue-ink);opacity:.55;line-height:1;margin-bottom:14px}
+.mc h4{font-family:var(--sans);font-size:16px;font-weight:700;line-height:1.3;letter-spacing:-.01em;margin-bottom:6px}
+.mc-tagline{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--blue-ink);line-height:1.4;margin-bottom:10px}
+.mc p{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.6}
 
-/* ── INTERVALLE — dark cinematic ────────────────────── */
-.intervals{
-  padding:96px 32px;
-  background:var(--dark);color:#fff;
-  position:relative;overflow:hidden;
-}
-.intervals::before{
-  content:"";position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 50% 80% at 90% 50%,rgba(26,110,245,.15) 0%,transparent 60%),
-    radial-gradient(ellipse 40% 40% at 10% 80%,rgba(56,182,255,.08) 0%,transparent 60%);
-  pointer-events:none;
-}
-.intervals::after{
-  content:"";position:absolute;inset:0;
-  background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);
-  background-size:28px 28px;pointer-events:none;
-}
-.intervals .wrap{position:relative;z-index:1}
-.intervals .sh h2{color:#fff}
-.intervals .sh p{color:rgba(255,255,255,.5)}
-.intervals .sh .label{color:#60a5fa}
-
-.int-table{
-  width:100%;border-collapse:separate;border-spacing:0 6px;
-}
+/* ── INTERVALLE — dark ───────────────────────────────── */
+.section.dark .eyebrow{color:#7fb0ff}
+.section.dark .eyebrow::before{background:#7fb0ff}
+.section.dark .sh h2{color:#fff}
+.section.dark .sh p{color:rgba(255,255,255,.6)}
+.int-table{width:100%;border-collapse:separate;border-spacing:0 7px}
 .int-table thead th{
-  padding:0 20px 12px;text-align:left;
-  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(255,255,255,.35);border-bottom:1px solid rgba(255,255,255,.08);
+  padding:0 22px 14px;text-align:left;font-family:var(--sans);
+  font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.1);
 }
 .int-row td{
-  padding:18px 20px;background:rgba(255,255,255,.04);
-  font-size:15px;color:rgba(255,255,255,.78);
-  transition:background .15s;
+  padding:19px 22px;background:rgba(255,255,255,.035);
+  font-family:var(--sans);font-size:15px;color:rgba(255,255,255,.8);transition:background .15s;
 }
-.int-row:hover td{background:rgba(26,110,245,.1)}
-.int-row td:first-child{border-radius:12px 0 0 12px;font-weight:700;color:#fff}
-.int-row td:last-child{border-radius:0 12px 12px 0;font-size:13px;color:rgba(255,255,255,.45)}
-.badge{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;
-}
-.b-blue{background:rgba(26,110,245,.18);color:#60a5fa;border:1px solid rgba(26,110,245,.28)}
-.b-green{background:rgba(52,211,153,.13);color:#6ee7b7;border:1px solid rgba(52,211,153,.22)}
-.b-amber{background:rgba(251,191,36,.10);color:#fcd34d;border:1px solid rgba(251,191,36,.18)}
-.b-violet{background:rgba(167,139,250,.10);color:#c4b5fd;border:1px solid rgba(167,139,250,.18)}
+.int-row:hover td{background:rgba(26,110,245,.12)}
+.int-row td:first-child{border-radius:10px 0 0 10px;font-weight:600;color:#fff}
+.int-row td:last-child{border-radius:0 10px 10px 0;font-size:13.5px;color:rgba(255,255,255,.5)}
+.badge{display:inline-flex;align-items:center;padding:4px 13px;border-radius:999px;font-family:var(--sans);font-size:12.5px;font-weight:600}
+.b-blue{background:rgba(26,110,245,.18);color:#93c0ff;border:1px solid rgba(96,165,250,.3)}
+.b-green{background:rgba(52,211,153,.13);color:#6ee7b7;border:1px solid rgba(52,211,153,.24)}
+.b-amber{background:rgba(251,191,36,.12);color:#fcd34d;border:1px solid rgba(251,191,36,.22)}
+.b-violet{background:rgba(167,139,250,.12);color:#c4b5fd;border:1px solid rgba(167,139,250,.22)}
 
 /* ── PRICING ─────────────────────────────────────────── */
-.pricing{padding:96px 32px;background:var(--soft)}
-
 .pricing-layout{
   max-width:var(--max);margin:0 auto;
-  display:grid;grid-template-columns:1.15fr 1fr;gap:28px;
+  display:grid;grid-template-columns:1.18fr 1fr;gap:24px;
 }
-
 .price-hero{
-  background:var(--dark);border-radius:var(--r-lg);
-  padding:44px;color:#fff;
-  position:relative;overflow:hidden;
-  display:flex;flex-direction:column;gap:28px;
+  background:var(--dark);border-radius:var(--r-lg);padding:46px;color:#fff;
+  position:relative;overflow:hidden;display:flex;flex-direction:column;gap:28px;
+  border:1px solid var(--line);
 }
 .price-hero::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 60% at 90% 0%,rgba(26,110,245,.22) 0%,transparent 65%);
+  background:radial-gradient(ellipse 80% 70% at 95% -10%,rgba(26,110,245,.22) 0%,transparent 60%);
   pointer-events:none;
 }
 .price-hero>*{position:relative;z-index:1}
-.ph-label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa}
-.ph-amount{
-  font-size:clamp(48px,6vw,68px);font-weight:900;letter-spacing:-.04em;line-height:1;
-  color:#fff;
-}
-.ph-amount sup{font-size:.4em;vertical-align:top;margin-top:.25em;font-weight:700}
-.ph-amount .period{font-size:18px;font-weight:400;color:rgba(255,255,255,.4);margin-left:4px}
-.ph-sub{font-size:15px;color:rgba(255,255,255,.5);line-height:1.6;max-width:340px}
-.ph-includes{display:flex;flex-direction:column;gap:10px}
-.ph-row{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,.7)}
-.ph-tick{
-  width:20px;height:20px;border-radius:50%;flex-shrink:0;
-  background:rgba(52,211,153,.18);color:#34d399;
-  display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;
-}
-.ph-cta{
-  display:inline-flex;align-items:center;gap:9px;
-  background:var(--blue);color:#fff;
-  padding:14px 24px;border-radius:12px;
-  font-weight:700;font-size:15px;width:fit-content;
-  box-shadow:0 8px 28px rgba(26,110,245,.35);
-  transition:transform .2s var(--ease),box-shadow .2s,background .15s;
-}
-.ph-cta:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 14px 40px rgba(26,110,245,.42)}
+.ph-label{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7fb0ff}
+.ph-amount{font-family:var(--serif);font-size:clamp(48px,6vw,68px);font-weight:400;letter-spacing:-.02em;line-height:1;color:#fff}
+.ph-amount sup{font-size:.38em;vertical-align:super;font-family:var(--sans);font-weight:500;margin-right:.12em}
+.ph-amount .period{font-family:var(--sans);font-size:18px;font-weight:400;color:rgba(255,255,255,.45);margin-left:6px}
+.ph-sub{font-family:var(--sans);font-size:15px;color:rgba(255,255,255,.55);line-height:1.6;max-width:360px;margin-top:12px}
+.ph-includes{display:flex;flex-direction:column;gap:11px}
+.ph-row{display:flex;align-items:center;gap:11px;font-family:var(--sans);font-size:14.5px;color:rgba(255,255,255,.78)}
+.ph-tick{width:20px;height:20px;border-radius:50%;flex-shrink:0;background:rgba(52,211,153,.18);color:#34d399;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.ph-cta{align-self:flex-start;background:var(--blue);color:#fff}
+.ph-cta:hover{background:var(--blue-d);transform:translateY(-1px)}
 
 .price-cards{display:flex;flex-direction:column;gap:16px}
-.pc{
-  background:#fff;border:1px solid var(--line);border-radius:var(--r);
-  padding:24px 22px;display:flex;flex-direction:column;gap:6px;
-  transition:border-color .2s,box-shadow .2s,transform .2s var(--ease);
-}
-.pc:hover{border-color:rgba(26,110,245,.25);box-shadow:0 8px 30px rgba(10,15,30,.07);transform:translateY(-2px)}
-.pc-label{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
-.pc-value{font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-.02em}
-.pc-value.ok{color:#059669}
-.pc-value.amber{color:#b45309}
-.pc p{font-size:13px;color:var(--ink-2);line-height:1.55}
+.pc{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:24px 22px;transition:border-color .2s,box-shadow .2s,transform .2s var(--ease)}
+.pc:hover{border-color:rgba(26,110,245,.28);box-shadow:0 8px 26px rgba(26,25,21,.06);transform:translateY(-2px)}
+.pc-label{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.pc-value{font-family:var(--serif);font-size:23px;color:var(--ink);margin-bottom:8px}
+.pc-value.ok{color:#0a7d57}
+.pc-value.amber{color:#9a6512}
+.pc p{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.6}
 .pricing-note{
-  max-width:var(--max);margin:20px auto 0;
-  background:#fff;border:1px solid var(--line);border-radius:var(--r);
-  padding:16px 20px;font-size:13px;color:var(--ink-2);line-height:1.55;
+  max-width:var(--max);margin:24px auto 0;background:var(--paper-2);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 22px;
+  font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.6;
 }
 
 /* ── BENEFITS ────────────────────────────────────────── */
-.benefits{padding:96px 32px;background:var(--bg)}
-.benefits-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
-  max-width:var(--max);margin:0 auto;
-}
-.bc{
-  padding:28px 22px;border-radius:var(--r-lg);
-  border:1px solid var(--line);background:var(--soft);
-  display:flex;flex-direction:column;gap:12px;
-  transition:transform .22s var(--ease),box-shadow .22s,border-color .22s,background .22s;
-}
-.bc:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(10,15,30,.09);border-color:rgba(26,110,245,.2);background:#fff}
-.bc-icon{
-  width:48px;height:48px;border-radius:12px;
-  background:linear-gradient(135deg,rgba(26,110,245,.1),rgba(26,110,245,.04));
-  border:1px solid rgba(26,110,245,.1);
-  display:flex;align-items:center;justify-content:center;
-}
-.bc-icon svg{width:22px;height:22px}
-.bc h3{font-size:16px;font-weight:800}
-.bc p{font-size:14px;color:var(--ink-2);line-height:1.65}
+.benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:var(--max);margin:0 auto}
+.bc{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 24px;
+  transition:transform .22s var(--ease),box-shadow .22s,border-color .22s}
+.bc:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(26,25,21,.07);border-color:rgba(26,110,245,.28)}
+.bc .icn{margin-bottom:18px}
+.bc h3{font-size:19px;margin-bottom:9px;letter-spacing:-.01em}
+.bc p{font-family:var(--sans);font-size:14.5px;color:var(--ink-2);line-height:1.65}
 
-/* ── PHILOSOPHY / CTA BAND ───────────────────────────── */
-.band{
-  padding:96px 32px;
-  background:linear-gradient(160deg,#07101f 0%,#0d1c3a 100%);
-  color:#fff;text-align:center;position:relative;overflow:hidden;
+/* ── COST COMPARE ────────────────────────────────────── */
+.cost-compare{
+  max-width:var(--max);margin:56px auto 0;
+  display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,4vw,56px);align-items:center;
 }
+.cc-left{max-width:460px}
+.cc-title{font-size:clamp(25px,3vw,34px);font-weight:400;letter-spacing:-.015em;line-height:1.12;margin-bottom:12px}
+.cc-title em{font-style:normal;color:var(--blue-ink)}
+.cc-intro{font-family:var(--sans);font-size:14.5px;color:var(--ink-2);line-height:1.6;margin-bottom:28px}
+.cc-slider-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:500;color:var(--ink-2);margin-bottom:13px}
+.cc-slider-val{font-weight:700;color:var(--ink);font-size:15px}
+#salaryRange{
+  -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;
+  background:var(--line);outline:none;cursor:pointer;
+}
+#salaryRange::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;
+  background:#fff;border:2px solid var(--blue);box-shadow:0 2px 9px rgba(26,110,245,.4);
+  cursor:pointer;transition:transform .15s var(--ease);
+}
+#salaryRange::-webkit-slider-thumb:hover{transform:scale(1.14)}
+#salaryRange::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--blue);
+  box-shadow:0 2px 9px rgba(26,110,245,.4);cursor:pointer;
+}
+.cc-slider-scale{display:flex;justify-content:space-between;margin-top:9px;
+  font-family:var(--sans);font-size:12px;color:var(--ink-3)}
+
+.cc-card{
+  background:var(--dark);color:#fff;border-radius:var(--r-lg);
+  padding:30px 32px;position:relative;overflow:hidden;
+}
+.cc-card::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 75% 60% at 85% -10%,rgba(26,110,245,.28),transparent 62%)}
+.cc-card>*{position:relative;z-index:1}
+.cc-card-label{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;color:#7fb0ff;margin-bottom:10px}
+.cc-card-amount{font-family:var(--serif);font-size:clamp(38px,5vw,52px);line-height:1;color:#fff;margin-bottom:24px}
+.cc-card-amount small{font-family:var(--sans);font-size:16px;font-weight:400;color:rgba(255,255,255,.5);margin-left:7px}
+.cc-card-rows{display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,.13)}
+.cc-card-row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;
+  font-family:var(--sans);font-size:13.5px;color:rgba(255,255,255,.62);
+  border-bottom:1px solid rgba(255,255,255,.08)}
+.cc-card-row>span:last-child{color:#fff;font-weight:600;white-space:nowrap}
+.cc-card-row-total>span{color:#fff!important;font-weight:700}
+.cc-card-row-haux>span:last-child{color:#7fb0ff}
+.cc-card-foot{margin-top:15px;font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.55)}
+.cc-card-foot span{color:#fff;font-weight:700}
+
+/* ── BAND / CTA ──────────────────────────────────────── */
+.band{padding:124px 40px;background:var(--dark);color:#fff;position:relative;overflow:hidden;text-align:center}
 .band::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(26,110,245,.18) 0%,transparent 70%);
+  background:radial-gradient(ellipse 60% 80% at 50% 0%,rgba(26,110,245,.2) 0%,transparent 62%);
   pointer-events:none;
 }
-.band::after{
-  content:"";position:absolute;inset:0;
-  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
-  background-size:28px 28px;pointer-events:none;
-}
-.band-inner{position:relative;z-index:1;max-width:680px;margin:0 auto}
-.band-eyebrow{
-  display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;
-  text-transform:uppercase;color:#60a5fa;margin-bottom:18px;
-}
-.band h2{
-  font-size:clamp(34px,5vw,54px);font-weight:900;color:#fff;margin-bottom:16px;
-}
-.band p{font-size:17px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:36px}
-.band-cta{
-  display:inline-flex;align-items:center;gap:10px;
-  background:var(--blue);color:#fff;
-  padding:16px 32px;border-radius:14px;
-  font-size:17px;font-weight:800;
-  box-shadow:0 12px 40px rgba(26,110,245,.4);
-  transition:transform .2s var(--ease),box-shadow .2s,background .15s;
-}
-.band-cta:hover{background:var(--blue-d);transform:translateY(-3px);box-shadow:0 20px 60px rgba(26,110,245,.5)}
+.band-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+.band-eyebrow{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7fb0ff;margin-bottom:22px;display:inline-block}
+.band h2{font-size:clamp(34px,5vw,56px);font-weight:400;color:#fff;line-height:1.06;letter-spacing:-.02em;margin-bottom:20px}
+.band p{font-family:var(--sans);font-size:18px;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:40px}
+.band .btn{padding:16px 32px;font-size:16px}
 
 /* ── CONTACT ─────────────────────────────────────────── */
-.contact{padding:96px 32px;background:var(--soft)}
-.contact-grid{
-  max-width:var(--max);margin:0 auto;
-  display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:start;
-}
-.contact-card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
-  padding:40px;box-shadow:0 8px 40px rgba(10,15,30,.06);
-}
-.contact-card h2{font-size:30px;font-weight:900;margin-bottom:10px}
-.contact-card>p{font-size:15px;color:var(--ink-2);line-height:1.65;margin-bottom:28px}
-.cc-btn{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;padding:16px 24px;border-radius:14px;
-  background:var(--blue);color:#fff;
-  font-size:16px;font-weight:800;
-  box-shadow:0 10px 36px rgba(26,110,245,.28);
-  transition:transform .2s var(--ease),box-shadow .2s,background .15s;
-}
-.cc-btn:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 16px 48px rgba(26,110,245,.38)}
-.cc-meta{margin-top:20px;display:flex;flex-direction:column;gap:10px}
-.cc-row{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-2)}
-.cc-ic{
-  width:32px;height:32px;border-radius:8px;flex-shrink:0;
-  background:rgba(26,110,245,.08);color:var(--blue);
-  display:flex;align-items:center;justify-content:center;font-size:14px;
-}
-.contact-aside{display:flex;flex-direction:column;gap:16px}
-.ca-card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--r);
-  padding:24px;
-}
-.ca-card h4{font-size:15px;font-weight:800;margin-bottom:14px}
-.ca-list li{
-  display:flex;gap:8px;padding:7px 0;
-  border-bottom:1px solid var(--line);font-size:14px;color:var(--ink-2);
-}
+.contact-grid{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:start}
+.contact-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:44px}
+.contact-card h2{font-size:34px;font-weight:400;letter-spacing:-.015em;margin-bottom:12px}
+.contact-card>p{font-family:var(--sans);font-size:16px;color:var(--ink-2);line-height:1.65;margin-bottom:28px}
+.cc-btn{width:100%;justify-content:center;background:var(--blue);color:#fff;padding:16px 24px;font-size:16px}
+.cc-btn:hover{background:var(--blue-d);transform:translateY(-1px)}
+.cc-meta{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.cc-row{display:flex;align-items:center;gap:12px;font-family:var(--sans);font-size:14.5px;color:var(--ink-2)}
+.cc-ic{width:34px;height:34px;border-radius:9px;flex-shrink:0;background:rgba(26,110,245,.08);border:1px solid rgba(26,110,245,.14);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:15px}
+.contact-aside{display:flex;flex-direction:column;gap:18px}
+.ca-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.ca-card h4{font-family:var(--sans);font-size:15px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.ca-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2);font-family:var(--sans);font-size:14.5px;color:var(--ink-2)}
 .ca-list li:last-child{border-bottom:none}
-.ca-dot{color:var(--blue);font-weight:700;flex-shrink:0;margin-top:2px}
+.ca-dot{color:var(--blue);font-weight:600;flex-shrink:0}
+.ca-card p{font-family:var(--sans);font-size:14.5px;color:var(--ink-2);line-height:1.65}
 
 /* ── FOOTER ──────────────────────────────────────────── */
-footer{
-  background:var(--dark);color:#fff;
-  padding:44px 32px 32px;
-}
+footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
 .foot-inner{max-width:var(--max);margin:0 auto}
-.foot-top{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:24px;padding-bottom:28px;margin-bottom:24px;
-  border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap;
-}
-.foot-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;color:#fff}
-.foot-sub{font-size:12px;color:rgba(255,255,255,.35);margin-top:3px}
-.foot-nav{display:flex;gap:20px;flex-wrap:wrap}
-.foot-nav a{font-size:13px;color:rgba(255,255,255,.38);transition:color .15s}
-.foot-nav a:hover{color:rgba(255,255,255,.75)}
-.foot-bottom{
-  display:flex;justify-content:space-between;align-items:center;
-  flex-wrap:wrap;gap:12px;
-}
-.foot-copy{font-size:12px;color:rgba(255,255,255,.28)}
-.foot-mail a{font-size:12px;color:rgba(255,255,255,.35);transition:color .15s}
-.foot-mail a:hover{color:rgba(255,255,255,.7)}
+.foot-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:30px;margin-bottom:26px;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap}
+.foot-brand svg{height:38px;width:auto}
+.foot-sub{font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.4);margin-top:12px}
+.foot-nav{display:flex;gap:24px;flex-wrap:wrap}
+.foot-nav a{font-family:var(--sans);font-size:14px;color:rgba(255,255,255,.45);transition:color .15s}
+.foot-nav a:hover{color:#fff}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot-copy{font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.32)}
+.foot-mail a{font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.4);transition:color .15s}
+.foot-mail a:hover{color:#fff}
 
 /* ── RESPONSIVE ───────────────────────────────────────── */
 @media(max-width:980px){
-  .hero-stats{flex-wrap:wrap}
-  .stat{border-right:none;border-bottom:1px solid rgba(10,15,30,.08);padding:16px 24px}
-  .stat:last-child{border-bottom:none}
   .usp-grid{grid-template-columns:1fr}
-  .feature-row{grid-template-columns:1fr;gap:32px}
+  .feature-row{grid-template-columns:1fr;gap:36px}
   .feature-row.reverse .feature-visual{order:0}
   .modules-grid{grid-template-columns:repeat(2,1fr)}
   .pricing-layout{grid-template-columns:1fr}
   .benefits-grid{grid-template-columns:repeat(2,1fr)}
   .contact-grid{grid-template-columns:1fr}
+  .cost-compare{grid-template-columns:1fr;gap:30px}
+  .cc-left{max-width:none}
+  .section{padding:84px 40px}
 }
 @media(max-width:640px){
-  .wrap{padding:0 18px}
-  .hero{padding:80px 18px 0}
-  .hero-actions{flex-direction:column;align-items:center}
-  .btn-main,.btn-outline{width:100%;justify-content:center}
-  .hero-images{grid-template-columns:1fr 1fr;padding:32px 18px 0}
+  .wrap,.nav{padding-left:22px;padding-right:22px}
+  .hero{padding:64px 22px 0}
+  .section,.band{padding-left:22px;padding-right:22px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .btn{justify-content:center}
+  .hero-images{grid-template-columns:1fr 1fr;gap:12px}
   .hi:nth-child(3){display:none}
-  .hi:nth-child(1){height:200px}
-  .hi:nth-child(2){height:160px}
+  .hi{height:200px}
   .modules-grid{grid-template-columns:1fr}
   .benefits-grid{grid-template-columns:1fr}
   .nav-links{display:none}
   .int-table thead th:last-child,.int-row td:last-child{display:none}
-  .foot-top{flex-direction:column;align-items:flex-start}
+  .foot-top{flex-direction:column}
+  .contact-card,.price-hero{padding:30px}
+  .cc-card{padding:26px 24px}
 }
 
-/* ── SCROLL ANIMATION ─────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+/* ── SCROLL REVEAL ────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.visible{opacity:1;transform:none}
-.reveal-delay-1{transition-delay:.08s}
-.reveal-delay-2{transition-delay:.16s}
-.reveal-delay-3{transition-delay:.24s}
-.reveal-delay-4{transition-delay:.32s}
+.reveal-delay-1{transition-delay:.07s}
+.reveal-delay-2{transition-delay:.14s}
+.reveal-delay-3{transition-delay:.21s}
+.reveal-delay-4{transition-delay:.28s}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
 
 </style>
 </head>
@@ -575,18 +461,19 @@ footer{
 
 <!-- NAV -->
 <div class="nav-outer">
-  <nav aria-label="Hauptnavigation">
+  <nav class="nav" aria-label="Hauptnavigation">
     <a href="#" class="nav-logo" aria-label="HAUX Facility Management">
-      <img src="assets/assets:logo-hauxfacility.png" alt="HAUX" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="mark" style="display:none">H</div>
-      <span>HAUX<span style="font-weight:400;opacity:.55"> Facility</span></span>
+      <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" fill="var(--ink)" d="M48 7 90 34 90 90 6 90 6 34Z M27 44 39 44 39 58 57 58 57 44 69 44 69 82 57 82 57 68 39 68 39 82 27 82Z"/>
+      </svg>
+      <span class="wm">HAUX <span>Facility</span></span>
     </a>
     <div class="nav-links">
       <a href="#leistungen">Leistungen</a>
       <a href="#intervalle">Intervalle</a>
       <a href="#preise">Preise</a>
       <a href="#vorteile">Vorteile</a>
-      <a href="#kontakt" class="nav-btn">Anfrage stellen</a>
+      <a href="#kontakt" class="btn nav-cta">Anfrage stellen</a>
     </div>
   </nav>
 </div>
@@ -594,26 +481,25 @@ footer{
 <!-- HERO -->
 <section class="hero" aria-labelledby="hero-h1">
   <div class="hero-inner">
-    <div class="hero-tag"><span class="dot"></span>Gebäudemanagement</div>
-    <h1 id="hero-h1">Ihr Gebäude.<br><em>Vollständig im Griff.</em></h1>
+    <div class="hero-brand">HAUX</div>
+    <h1 id="hero-h1">Ihr Gebäude. <em>Vollständig im Griff.</em></h1>
     <p class="hero-lead">
-      Zentral gesteuert. Transparent dokumentiert. Wirtschaftlich optimiert.<br>
+      Zentral gesteuert. Transparent dokumentiert. Wirtschaftlich optimiert.
       Volle Kontrolle — ohne dass Sie sich selbst darum kümmern müssen.
     </p>
     <div class="hero-actions">
-      <a class="btn-main" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
+      <a class="btn btn-primary" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Kostenloses Erstgespräch
       </a>
-      <a class="btn-outline" href="#leistungen">
+      <a class="btn btn-ghost" href="#leistungen">
         Leistungen entdecken
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </a>
     </div>
   </div>
 
-  <!-- Hero Image Showcase -->
-  <div class="hero-images">
+  <div class="hero-images hero-inner">
     <div class="hi">
       <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Modernes Bürogebäude" loading="lazy">
       <div class="hi-label">Gewerbeobjekte & Bürokomplexe</div>
@@ -629,33 +515,27 @@ footer{
   </div>
 </section>
 
-<!-- USP STRIP -->
-<section class="usp" aria-labelledby="usp-h">
+<!-- USP -->
+<section class="section" aria-labelledby="usp-h">
   <div class="wrap">
-    <div class="sh reveal">
-      <div class="label">Warum HAUX</div>
+    <div class="sh center reveal">
+      <div class="eyebrow">Warum HAUX</div>
       <h2 id="usp-h">Drei Versprechen. Gehalten.</h2>
       <p>Wir betreiben Ihr Gebäude wie ein System — planbar, risikominimiert und transparent.</p>
     </div>
     <div class="usp-grid">
-      <div class="usp-card reveal reveal-delay-1">
-        <div class="usp-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
+      <div class="card reveal reveal-delay-1">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <h3>Ein Ansprechpartner</h3>
         <p>Zentrale Koordination aller Gebäudethemen, Dienstleister und Maßnahmen. Kein Ping-Pong mehr zwischen Gewerken.</p>
       </div>
-      <div class="usp-card reveal reveal-delay-2">
-        <div class="usp-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        </div>
+      <div class="card reveal reveal-delay-2">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
         <h3>Volle Transparenz</h3>
         <p>Status, Kosten, Fristen und Risiken — jederzeit nachvollziehbar dokumentiert. Monatlicher Management-Report inklusive.</p>
       </div>
-      <div class="usp-card reveal reveal-delay-3">
-        <div class="usp-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
+      <div class="card reveal reveal-delay-3">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
         <h3>Planbarer Betrieb</h3>
         <p>SLA-gesteuerter Betrieb mit definierten Reaktionszeiten und klarer Verantwortlichkeit auf jeder Ebene.</p>
       </div>
@@ -663,18 +543,18 @@ footer{
   </div>
 </section>
 
-<!-- LEISTUNGEN — feature rows -->
-<section id="leistungen" class="services" aria-labelledby="services-h">
+<!-- LEISTUNGEN -->
+<section id="leistungen" class="section alt" aria-labelledby="services-h">
   <div class="wrap">
     <div class="sh reveal">
-      <div class="label">Leistungsmodule</div>
+      <div class="eyebrow">Leistungsmodule</div>
       <h2 id="services-h">Was wir für Sie steuern.</h2>
       <p>Alle Module — klar strukturiert, objektspezifisch anpassbar. Erstmals vollständige Transparenz über die Vorgänge in Ihrem Gebäude.</p>
     </div>
   </div>
 
   <!-- Row 1 -->
-  <div class="feature-row wrap reveal">
+  <div class="feature-row reveal">
     <div class="feature-visual">
       <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80" alt="Gebäudemanagement vor Ort" loading="lazy">
       <div class="feature-visual-title">Steuerung & operatives Management</div>
@@ -686,7 +566,7 @@ footer{
       </div>
     </div>
     <div class="feature-text">
-      <div class="ft-num">Module 01 – 04</div>
+      <span class="ft-num">Module 01 – 04</span>
       <h3>Alles läuft — auch wenn Sie nicht da sind.</h3>
       <p class="ft-tagline">Ein Ansprechpartner. Alle Themen. Klare Abläufe.</p>
       <p>Zentraler Ansprechpartner für Eigentümer, Verwaltung und Nutzer. Wir koordinieren alle Gewerke, steuern externe Dienstleister, erfassen Störungen zentral und sorgen für lückenlose Prüf- und Wartungskalender.</p>
@@ -700,9 +580,9 @@ footer{
   </div>
 
   <!-- Row 2 -->
-  <div class="feature-row reverse wrap reveal" style="margin-top:80px">
+  <div class="feature-row reverse reveal">
     <div class="feature-text">
-      <div class="ft-num">Module 05 – 08</div>
+      <span class="ft-num">Module 05 – 08</span>
       <h3>Sehen, was wirklich passiert.</h3>
       <p class="ft-tagline">Klare Daten. Fundierte Entscheidungen. Minimierte Risiken.</p>
       <p>Regelmäßige Objektbegehungen mit Fotodokumentation, ein verdichteter monatlicher Management-Report und strukturiertes Risikomanagement sorgen dafür, dass Sie immer den Überblick behalten — und Probleme erkannt werden, bevor sie teuer werden.</p>
@@ -726,11 +606,11 @@ footer{
   </div>
 </section>
 
-<!-- MODULES COMPACT GRID -->
-<section class="modules-section" aria-label="Alle 8 Leistungsmodule">
+<!-- MODULES -->
+<section class="section" aria-label="Alle 8 Leistungsmodule">
   <div class="wrap">
-    <div class="sh reveal">
-      <div class="label">Alle Module</div>
+    <div class="sh center reveal">
+      <div class="eyebrow">Alle Module</div>
       <h2>8 Module. Ein System.</h2>
       <p>Objektspezifisch kombinierbar — wir definieren gemeinsam, was Ihr Gebäude braucht.</p>
     </div>
@@ -788,14 +668,14 @@ footer{
 </section>
 
 <!-- INTERVALLE -->
-<section id="intervalle" class="intervals" aria-labelledby="int-h">
+<section id="intervalle" class="section dark" aria-labelledby="int-h">
   <div class="wrap">
     <div class="sh reveal">
-      <div class="label">Leistungsintervalle</div>
+      <div class="eyebrow">Leistungsintervalle</div>
       <h2 id="int-h">Strukturiert. Planbar. Verlässlich.</h2>
       <p>Jede Leistung mit definierten Intervallen — damit nichts vergessen wird und Sie immer wissen, was wann passiert.</p>
     </div>
-    <table class="int-table reveal" role="table" aria-label="Leistungsintervalle">
+    <table class="int-table reveal" aria-label="Leistungsintervalle">
       <thead>
         <tr>
           <th scope="col" style="width:36%">Leistung</th>
@@ -804,46 +684,22 @@ footer{
         </tr>
       </thead>
       <tbody>
-        <tr class="int-row">
-          <td>Monatsreport & Statusreview</td>
-          <td><span class="badge b-blue">Monatlich</span></td>
-          <td>Report mit Leistungsübersicht, Ticketstatus und Empfehlungen</td>
-        </tr>
-        <tr class="int-row">
-          <td>Objektbegehung</td>
-          <td><span class="badge b-blue">Monatlich</span></td>
-          <td>Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste</td>
-        </tr>
-        <tr class="int-row">
-          <td>Wartungs- & Prüfmonitoring</td>
-          <td><span class="badge b-green">Laufend</span></td>
-          <td>Fristenkontrolle und Nachverfolgung aller Wartungs- und Prüftermine</td>
-        </tr>
-        <tr class="int-row">
-          <td>Dienstleisterreview</td>
-          <td><span class="badge b-amber">Quartalsweise</span></td>
-          <td>Bewertung Qualität, Preis-Leistung und Zuverlässigkeit</td>
-        </tr>
-        <tr class="int-row">
-          <td>Kosten- & Maßnahmenreview</td>
-          <td><span class="badge b-amber">Quartalsweise</span></td>
-          <td>Analyse Kostentreiber, Einsparpotenziale, geplante Maßnahmen</td>
-        </tr>
-        <tr class="int-row">
-          <td>Jahresübersicht & Planung</td>
-          <td><span class="badge b-violet">Jährlich</span></td>
-          <td>Gesamtauswertung und Vorausplanung für das Folgejahr</td>
-        </tr>
+        <tr class="int-row"><td>Monatsreport & Statusreview</td><td><span class="badge b-blue">Monatlich</span></td><td>Report mit Leistungsübersicht, Ticketstatus und Empfehlungen</td></tr>
+        <tr class="int-row"><td>Objektbegehung</td><td><span class="badge b-blue">Monatlich</span></td><td>Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste</td></tr>
+        <tr class="int-row"><td>Wartungs- & Prüfmonitoring</td><td><span class="badge b-green">Laufend</span></td><td>Fristenkontrolle und Nachverfolgung aller Wartungs- und Prüftermine</td></tr>
+        <tr class="int-row"><td>Dienstleisterreview</td><td><span class="badge b-amber">Quartalsweise</span></td><td>Bewertung Qualität, Preis-Leistung und Zuverlässigkeit</td></tr>
+        <tr class="int-row"><td>Kosten- & Maßnahmenreview</td><td><span class="badge b-amber">Quartalsweise</span></td><td>Analyse Kostentreiber, Einsparpotenziale, geplante Maßnahmen</td></tr>
+        <tr class="int-row"><td>Jahresübersicht & Planung</td><td><span class="badge b-violet">Jährlich</span></td><td>Gesamtauswertung und Vorausplanung für das Folgejahr</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="preise" class="pricing" aria-labelledby="pricing-h">
+<section id="preise" class="section alt" aria-labelledby="pricing-h">
   <div class="wrap">
     <div class="sh reveal">
-      <div class="label">Kostenstruktur</div>
+      <div class="eyebrow">Kostenstruktur</div>
       <h2 id="pricing-h">Individuelle Lösungen. Transparente Preise.</h2>
       <p>Wir kalkulieren objektspezifisch — kein starres Paket, sondern exakt das, was Ihr Gebäude braucht.</p>
     </div>
@@ -851,8 +707,8 @@ footer{
       <div class="price-hero reveal">
         <div class="ph-label">Monatliche Managementpauschale</div>
         <div>
-          <div class="ph-amount"><sup>ab</sup> 1.200 €<span class="period">/Monat</span></div>
-          <p class="ph-sub" style="margin-top:10px">Vollständiges Gebäudemanagement — objektspezifisch kalkuliert. Begehung und Report inklusive.</p>
+          <div class="ph-amount"><sup>ab</sup>899 €<span class="period">/Monat</span></div>
+          <p class="ph-sub">Vollständiges Gebäudemanagement — objektspezifisch kalkuliert. Begehung und Report inklusive.</p>
         </div>
         <div class="ph-includes">
           <div class="ph-row"><div class="ph-tick">✓</div>Alle 8 Leistungsmodule nach Vereinbarung</div>
@@ -861,7 +717,7 @@ footer{
           <div class="ph-row"><div class="ph-tick">✓</div>SLA-definierte Reaktionszeiten</div>
           <div class="ph-row"><div class="ph-tick">✓</div>Zentraler Ansprechpartner für alle Themen</div>
         </div>
-        <a class="ph-cta" href="mailto:info@hauxfacility.de?subject=Angebot%20HAUX%20Gebäudemanagement">
+        <a class="btn ph-cta" href="mailto:info@hauxfacility.de?subject=Angebot%20HAUX%20Gebäudemanagement">
           Angebot anfordern
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
@@ -891,41 +747,58 @@ footer{
 </section>
 
 <!-- BENEFITS -->
-<section id="vorteile" class="benefits" aria-labelledby="ben-h">
+<section id="vorteile" class="section" aria-labelledby="ben-h">
   <div class="wrap">
-    <div class="sh reveal">
-      <div class="label">Was Sie gewinnen</div>
+    <div class="sh center reveal">
+      <div class="eyebrow">Was Sie gewinnen</div>
       <h2 id="ben-h">Ihr Vorteil auf einen Blick.</h2>
       <p>HAUX bündelt alle Gebäudethemen in einem Modell — damit Sie die volle Kontrolle behalten, ohne sich um operative Details zu kümmern.</p>
     </div>
     <div class="benefits-grid">
       <div class="bc reveal reveal-delay-1">
-        <div class="bc-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <h3>Zeitersparnis</h3>
         <p>Kein operativer Aufwand mehr auf Ihrer Seite — wir koordinieren alles, von der Erstmeldung bis zur Abnahme.</p>
       </div>
       <div class="bc reveal reveal-delay-2">
-        <div class="bc-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <h3>Kostentransparenz</h3>
         <p>Nachvollziehbare Kostenkontrolle und wirtschaftlich optimierte Services durch Angebotsvergleich und Rechnungsprüfung.</p>
       </div>
       <div class="bc reveal reveal-delay-3">
-        <div class="bc-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3>Rechtssicherheit</h3>
         <p>Alle Betreiberpflichten werden strukturiert erfüllt und vollständig dokumentiert — Haftungsrisiken systematisch minimiert.</p>
       </div>
       <div class="bc reveal reveal-delay-4">
-        <div class="bc-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-        </div>
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
         <h3>Proaktiver Betrieb</h3>
         <p>Probleme werden erkannt, bevor sie teuer werden — durch regelmäßige Begehungen und systematisches Monitoring.</p>
+      </div>
+    </div>
+
+    <!-- COST COMPARISON -->
+    <div class="cost-compare reveal">
+      <div class="cc-left">
+        <div class="eyebrow">Rechnen Sie nach</div>
+        <h3 class="cc-title">Günstiger als ein <em>eigener Hausmeister</em>.</h3>
+        <p class="cc-intro">Ein fest angestellter Hausmeister kostet weit mehr als sein Bruttogehalt — Sozialabgaben, Arbeitsplatz und Ausfallzeiten kommen obendrauf.</p>
+        <label class="cc-slider-label" for="salaryRange">Bruttogehalt Hausmeister: <span class="cc-slider-val" id="salaryOut">2.900 €</span> / Monat</label>
+        <input type="range" id="salaryRange" min="2400" max="4000" step="100" value="2900" aria-label="Bruttogehalt Hausmeister pro Monat" />
+        <div class="cc-slider-scale"><span>2.400 €</span><span>4.000 €</span></div>
+      </div>
+
+      <div class="cc-card">
+        <div class="cc-card-label">Sie sparen mit HAUX</div>
+        <div class="cc-card-amount"><span id="savMonth">3.390 €</span><small>/ Monat</small></div>
+        <div class="cc-card-rows">
+          <div class="cc-card-row"><span>Bruttogehalt</span><span id="brkGross">2.900 €</span></div>
+          <div class="cc-card-row"><span>Sozialabgaben (≈ 21 %)</span><span id="brkSV">609 €</span></div>
+          <div class="cc-card-row"><span>Arbeitsplatz &amp; Ausfallzeiten</span><span id="brkOh">780 €</span></div>
+          <div class="cc-card-row cc-card-row-total"><span>Arbeitgeberkosten</span><span id="brkTotal">4.289 €</span></div>
+          <div class="cc-card-row cc-card-row-haux"><span>HAUX Facility Management</span><span id="hauxAmount">899 €</span></div>
+        </div>
+        <div class="cc-card-foot"><span id="savYear">40.680 €</span> Ersparnis pro Jahr</div>
       </div>
     </div>
   </div>
@@ -935,9 +808,9 @@ footer{
 <section class="band" aria-label="Call to Action">
   <div class="band-inner reveal">
     <div class="band-eyebrow">Unser Leitgedanke</div>
-    <h2>Nicht mehr Ansprechpartner.<br>Ein strukturiertes Management.</h2>
+    <h2>Nicht mehr Ansprechpartner. Ein strukturiertes Management.</h2>
     <p>Wir professionalisieren und zentralisieren den Gebäudebetrieb — datenbasiert, transparent und SLA-gesteuert. Sie sehen erstmals wirklich, was in Ihrem Gebäude passiert.</p>
-    <a class="band-cta" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
+    <a class="btn btn-primary" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       Jetzt Erstgespräch anfragen
     </a>
@@ -945,18 +818,18 @@ footer{
 </section>
 
 <!-- CONTACT -->
-<section id="kontakt" class="contact" aria-labelledby="contact-h">
+<section id="kontakt" class="section alt" aria-labelledby="contact-h">
   <div class="contact-grid">
     <div class="contact-card reveal">
-      <div style="font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:10px">Kontakt</div>
+      <div class="eyebrow">Kontakt</div>
       <h2 id="contact-h">Sprechen Sie mit uns.</h2>
       <p>Wir stellen Ihnen den Leistungsumfang gerne objektspezifisch zusammen und passen Intervalle, Reportingtiefe und Module an Ihre Anforderungen an.</p>
-      <a class="cc-btn" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
+      <a class="btn cc-btn" href="mailto:info@hauxfacility.de?subject=Anfrage%20HAUX%20Gebäudemanagement">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Kostenloses Erstgespräch anfragen
       </a>
       <div class="cc-meta">
-        <div class="cc-row"><div class="cc-ic">✉</div><a href="mailto:info@hauxfacility.de" style="color:inherit">info@hauxfacility.de</a></div>
+        <div class="cc-row"><div class="cc-ic">✉</div><a href="mailto:info@hauxfacility.de">info@hauxfacility.de</a></div>
         <div class="cc-row"><div class="cc-ic">⏱</div><span>Antwort in der Regel innerhalb von 24 Stunden</span></div>
       </div>
     </div>
@@ -973,7 +846,7 @@ footer{
       </div>
       <div class="ca-card">
         <h4>Alles ist anpassbar</h4>
-        <p style="font-size:14px;color:var(--ink-2);line-height:1.65">Intervalle, Reportingtiefe und Leistungsmodule werden gemeinsam mit Ihnen definiert — kein starres Paket, sondern exakt das, was Ihr Objekt benötigt.</p>
+        <p>Intervalle, Reportingtiefe und Leistungsmodule werden gemeinsam mit Ihnen definiert — kein starres Paket, sondern exakt das, was Ihr Objekt benötigt.</p>
       </div>
     </div>
   </div>
@@ -983,11 +856,15 @@ footer{
 <footer>
   <div class="foot-inner">
     <div class="foot-top">
-      <div>
-        <div class="foot-brand">
-          <div class="mark" style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#1a6ef5,#38b6ff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px">H</div>
-          HAUX Facility Management
-        </div>
+      <div class="foot-brand">
+        <svg viewBox="0 0 300 96" xmlns="http://www.w3.org/2000/svg" aria-label="HAUX Facility Management">
+          <style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&amp;display=swap');</style>
+          <g transform="translate(5,7) scale(0.84)">
+            <path fill-rule="evenodd" fill="#F5F4EF" d="M48 7 90 34 90 90 6 90 6 34Z M27 44 39 44 39 58 57 58 57 44 69 44 69 82 57 82 57 68 39 68 39 82 27 82Z"/>
+          </g>
+          <text x="100" y="53" font-family="'Poppins',sans-serif" font-size="46" font-weight="600" letter-spacing="2" fill="#F5F4EF">HAUX</text>
+          <text x="102" y="74" font-family="'Poppins',sans-serif" font-size="11.5" font-weight="500" letter-spacing="2.6" fill="#F5F4EF" opacity="0.6">FACILITY MANAGEMENT</text>
+        </svg>
         <div class="foot-sub">Strukturiert · Transparent · Effizient</div>
       </div>
       <nav class="foot-nav" aria-label="Footer Navigation">
@@ -1011,7 +888,9 @@ footer{
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const t = document.querySelector(a.getAttribute('href'));
+    const id = a.getAttribute('href');
+    if(id === '#') return;
+    const t = document.querySelector(id);
     if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
   });
 });
@@ -1023,6 +902,42 @@ const io = new IntersectionObserver(entries => {
   });
 }, {threshold: 0.08, rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Cost comparison calculator
+(function(){
+  const range = document.getElementById('salaryRange');
+  if(!range) return;
+  const HAUX = 899, OVERHEAD = 780, SV_RATE = 0.21;
+  const fmt = n => Math.round(n).toLocaleString('de-DE') + ' €';
+  const $ = id => document.getElementById(id);
+  const el = {
+    salaryOut:$('salaryOut'), hauxAmount:$('hauxAmount'),
+    brkGross:$('brkGross'), brkSV:$('brkSV'), brkOh:$('brkOh'),
+    brkTotal:$('brkTotal'), savMonth:$('savMonth'), savYear:$('savYear')
+  };
+
+  function render(){
+    const g = +range.value;
+    const sv = g * SV_RATE;
+    const total = g + sv + OVERHEAD;
+    const savM = total - HAUX;
+    const pct = (g - range.min) / (range.max - range.min) * 100;
+    range.style.background =
+      `linear-gradient(90deg,var(--blue) 0%,var(--blue) ${pct}%,var(--line) ${pct}%,var(--line) 100%)`;
+    el.salaryOut.textContent = fmt(g);
+    el.brkGross.textContent  = fmt(g);
+    el.brkSV.textContent     = fmt(sv);
+    el.brkOh.textContent     = fmt(OVERHEAD);
+    el.brkTotal.textContent  = fmt(total);
+    el.hauxAmount.textContent= fmt(HAUX);
+    el.savMonth.textContent  = fmt(savM);
+    el.savYear.textContent   = fmt(savM * 12);
+  }
+
+  range.addEventListener('input', render);
+  range.addEventListener('wheel', e => e.preventDefault(), {passive:false});
+  render();
+})();
 </script>
 </body>
 </html>
