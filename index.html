@@ -45,9 +45,15 @@ a{color:inherit;text-decoration:none}
 ul{list-style:none;padding:0;margin:0}
 img{display:block;max-width:100%}
 ::selection{background:rgba(26,110,245,.18)}
+section[id]{scroll-margin-top:76px}
 
 /* ── LAYOUT ──────────────────────────────────────────── */
 .wrap{max-width:var(--max);margin:0 auto;padding:0 40px}
+
+/* ── SCROLL PROGRESS ─────────────────────────────────── */
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:2.5px;z-index:400;pointer-events:none}
+.scroll-progress span{display:block;height:100%;background:var(--blue);
+  transform-origin:left;transform:scaleX(0);will-change:transform}
 
 /* ── SHARED: section eyebrow + heading ───────────────── */
 .eyebrow{
@@ -56,7 +62,9 @@ img{display:block;max-width:100%}
   letter-spacing:.08em;text-transform:uppercase;color:var(--blue-ink);
   margin-bottom:18px;
 }
-.eyebrow::before{content:"";width:18px;height:1px;background:var(--blue);opacity:.6}
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--blue);opacity:.6;
+  transform-origin:left;transition:transform .9s var(--ease) .25s}
+.reveal:not(.visible) .eyebrow::before{transform:scaleX(0)}
 
 .sh{margin-bottom:64px;max-width:680px}
 .sh.center{margin-left:auto;margin-right:auto;text-align:center}
@@ -69,13 +77,17 @@ img{display:block;max-width:100%}
   display:inline-flex;align-items:center;gap:9px;
   font-family:var(--sans);font-size:15px;font-weight:600;
   padding:13px 24px;border-radius:9px;
-  transition:background .18s,color .18s,border-color .18s,transform .18s var(--ease);
+  transition:background .18s,color .18s,border-color .18s,transform .18s var(--ease),box-shadow .25s var(--ease);
   cursor:pointer;border:1px solid transparent;white-space:nowrap;
 }
-.btn-primary{background:var(--blue);color:#fff}
-.btn-primary:hover{background:var(--blue-d);transform:translateY(-1px)}
+.btn svg{transition:transform .3s var(--ease)}
+.btn:hover svg{transform:translateX(3px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 1px 2px rgba(18,84,204,.25)}
+.btn-primary:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 10px 26px rgba(18,84,204,.32)}
 .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .btn-ghost:hover{background:rgba(26,25,21,.04);border-color:rgba(26,25,21,.28)}
+.btn-ghost:hover svg{transform:translateY(3px)}
 .btn-light{background:var(--paper-2);color:var(--ink);border-color:var(--line)}
 .btn-light:hover{background:#fff;transform:translateY(-1px)}
 
@@ -85,13 +97,18 @@ img{display:block;max-width:100%}
   background:rgba(243,240,233,.78);
   backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
   border-bottom:1px solid var(--line-2);
+  transition:background .35s,box-shadow .35s;
 }
+.nav-outer.scrolled{background:rgba(243,240,233,.94);box-shadow:0 1px 24px rgba(26,25,21,.08)}
 .nav{
   max-width:var(--max);margin:0 auto;padding:0 40px;
   height:66px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  transition:height .35s var(--ease);
 }
+.nav-outer.scrolled .nav{height:56px}
 .nav-logo{display:flex;align-items:center;gap:11px}
-.nav-logo svg{height:30px;width:auto;flex-shrink:0}
+.nav-logo svg{height:30px;width:auto;flex-shrink:0;transition:transform .35s var(--ease)}
+.nav-outer.scrolled .nav-logo svg{transform:scale(.9)}
 .nav-logo .wm{font-family:var(--sans);font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
 .nav-logo .wm span{font-weight:400;color:var(--ink-3)}
 .nav-links{display:flex;align-items:center;gap:4px}
@@ -102,9 +119,9 @@ img{display:block;max-width:100%}
 .nav-links a:hover{color:var(--ink);background:rgba(26,25,21,.05)}
 .nav-links .nav-cta{
   background:var(--blue);color:#fff;font-weight:600;padding:9px 18px;margin-left:8px;
-  transition:background .15s,transform .15s var(--ease);
+  transition:background .15s,transform .15s var(--ease),box-shadow .2s;
 }
-.nav-links .nav-cta:hover{background:var(--blue-d);transform:translateY(-1px);color:#fff}
+.nav-links .nav-cta:hover{background:var(--blue-d);transform:translateY(-1px);color:#fff;box-shadow:0 6px 18px rgba(18,84,204,.28)}
 
 /* ── HERO ────────────────────────────────────────────── */
 .hero{
@@ -113,13 +130,31 @@ img{display:block;max-width:100%}
     radial-gradient(ellipse 90% 70% at 15% -10%,rgba(26,110,245,.07) 0%,transparent 55%),
     var(--paper);
   position:relative;
+  overflow:hidden;
 }
-.hero-inner{max-width:var(--max);margin:0 auto}
+/* drifting light orb behind the headline (parallax layer 0) */
+.hero-orb{
+  position:absolute;top:-140px;right:-180px;width:560px;height:560px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,110,245,.11) 0%,transparent 64%);
+  pointer-events:none;will-change:transform;
+  animation:orbDrift 18s ease-in-out infinite alternate;
+}
+.hero-orb.orb-2{
+  top:auto;bottom:60px;left:-220px;right:auto;width:480px;height:480px;
+  background:radial-gradient(circle,rgba(26,110,245,.07) 0%,transparent 62%);
+  animation-duration:24s;animation-delay:-8s;
+}
+@keyframes orbDrift{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(-70px,60px,0) scale(1.18)}
+}
+.hero-inner{max-width:var(--max);margin:0 auto;position:relative;z-index:1}
 .hero-brand{
   display:inline-block;
   font-family:var(--sans);font-weight:700;font-size:14px;
   letter-spacing:.24em;text-transform:uppercase;
   color:var(--blue-ink);margin-bottom:28px;
+  animation:fadeUp .8s var(--ease) both;
 }
 .hero h1{
   font-size:clamp(46px,6.6vw,82px);
@@ -128,14 +163,23 @@ img{display:block;max-width:100%}
   max-width:14ch;margin-bottom:26px;
 }
 .hero h1 em{font-style:italic;color:var(--blue-ink)}
+/* kinetic type: each word rises out of its own mask */
+.hw{display:inline-block;overflow:hidden;vertical-align:bottom;
+  padding-bottom:.12em;margin-bottom:-.12em}
+.hw-i{display:inline-block;transform:translateY(115%);
+  animation:riseUp 1s var(--ease) var(--d,0s) both}
+@keyframes riseUp{from{transform:translateY(115%)}to{transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .hero-lead{
   font-family:var(--sans);font-size:clamp(17px,1.9vw,21px);color:var(--ink-2);
   line-height:1.6;max-width:560px;margin-bottom:40px;
+  animation:fadeUp .9s var(--ease) .55s both;
 }
-.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:80px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:80px;
+  animation:fadeUp .9s var(--ease) .72s both}
 .hero-actions .btn{padding:15px 28px;font-size:16px}
 
-/* hero image showcase */
+/* hero image showcase — parallax rig */
 .hero-images{
   display:grid;grid-template-columns:1.15fr .92fr 1fr;gap:18px;
   padding-bottom:96px;
@@ -144,14 +188,18 @@ img{display:block;max-width:100%}
   position:relative;border-radius:var(--r-lg);overflow:hidden;
   border:1px solid var(--line);background:var(--panel);
   height:300px;box-shadow:0 1px 2px rgba(26,25,21,.05);
+  transition:box-shadow .4s var(--ease);
+  will-change:transform;
 }
-.hi img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
-.hi:hover img{transform:scale(1.04)}
+.hi:hover{box-shadow:0 18px 48px rgba(26,25,21,.14)}
+.hi img{width:100%;height:100%;object-fit:cover;will-change:transform}
 .hi-label{
   position:absolute;bottom:0;left:0;right:0;padding:22px 18px 16px;
   background:linear-gradient(to top,rgba(15,17,22,.78) 0%,transparent 100%);
   color:#fff;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.01em;
+  transition:padding-bottom .35s var(--ease);
 }
+.hi:hover .hi-label{padding-bottom:22px}
 
 /* ── SECTION SHELLS ──────────────────────────────────── */
 .section{padding:108px 40px}
@@ -173,7 +221,9 @@ img{display:block;max-width:100%}
   width:46px;height:46px;border-radius:11px;margin-bottom:20px;
   background:rgba(26,110,245,.08);border:1px solid rgba(26,110,245,.14);
   display:flex;align-items:center;justify-content:center;
+  transition:transform .35s var(--ease),background .35s;
 }
+.card:hover .icn,.bc:hover .icn{transform:translateY(-3px) rotate(-4deg);background:rgba(26,110,245,.14)}
 .icn svg{width:22px;height:22px}
 .card h3{font-size:22px;margin-bottom:10px;letter-spacing:-.01em}
 .card p{font-family:var(--sans);font-size:15.5px;color:var(--ink-2);line-height:1.65}
@@ -190,12 +240,13 @@ img{display:block;max-width:100%}
   position:relative;border-radius:var(--r-lg);overflow:hidden;
   min-height:420px;display:flex;flex-direction:column;justify-content:flex-end;
   padding:30px;gap:14px;background:var(--dark);border:1px solid var(--line);
+  transition:box-shadow .4s var(--ease);
 }
+.feature-visual:hover{box-shadow:0 22px 54px rgba(26,25,21,.16)}
 .feature-visual img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  transition:transform .7s var(--ease);
+  will-change:transform;
 }
-.feature-visual:hover img{transform:scale(1.03)}
 .feature-visual::after{
   content:"";position:absolute;inset:0;
   background:linear-gradient(to top,rgba(15,17,22,.86) 0%,rgba(15,17,22,.2) 55%,transparent 100%);
@@ -210,7 +261,9 @@ img{display:block;max-width:100%}
   background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);
   color:rgba(255,255,255,.82);padding:5px 12px;border-radius:999px;
   backdrop-filter:blur(4px);
+  transition:background .25s,transform .25s var(--ease);
 }
+.fchip:hover{transform:translateY(-2px)}
 .fchip.active{background:rgba(26,110,245,.32);border-color:rgba(96,165,250,.5);color:#bfdbfe}
 
 .feature-text .ft-num{
@@ -226,7 +279,9 @@ img{display:block;max-width:100%}
   width:21px;height:21px;border-radius:6px;flex-shrink:0;margin-top:2px;
   background:rgba(26,110,245,.1);color:var(--blue);
   display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  transition:transform .3s var(--ease),background .3s;
 }
+.ft-item:hover .ft-check{background:var(--blue);color:#fff;transform:scale(1.08)}
 
 /* ── MODULES GRID (8) ────────────────────────────────── */
 .modules-grid{
@@ -237,14 +292,35 @@ img{display:block;max-width:100%}
   background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);
   padding:26px 22px;display:flex;flex-direction:column;
   transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s;
+  position:relative;overflow:hidden;
+}
+.mc::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--blue);transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease);
 }
 .mc:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(26,25,21,.07);border-color:rgba(26,110,245,.28)}
-.mc-num{font-family:var(--serif);font-size:30px;color:var(--blue-ink);opacity:.55;line-height:1;margin-bottom:14px}
+.mc:hover::before{transform:scaleX(1)}
+.mc-num{font-family:var(--serif);font-size:30px;color:var(--blue-ink);opacity:.55;line-height:1;margin-bottom:14px;
+  transition:opacity .3s}
+.mc:hover .mc-num{opacity:1}
 .mc h4{font-family:var(--sans);font-size:16px;font-weight:700;line-height:1.3;letter-spacing:-.01em;margin-bottom:6px}
 .mc-tagline{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--blue-ink);line-height:1.4;margin-bottom:10px}
 .mc p{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.6}
 
 /* ── INTERVALLE — dark ───────────────────────────────── */
+.section.dark{position:relative;overflow:hidden}
+.section.dark .dark-glow{
+  position:absolute;top:-30%;right:-10%;width:70%;height:90%;
+  background:radial-gradient(ellipse,rgba(26,110,245,.13) 0%,transparent 62%);
+  pointer-events:none;will-change:transform;
+  animation:glowDrift 20s ease-in-out infinite alternate;
+}
+@keyframes glowDrift{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(-8%,10%,0) scale(1.15)}
+}
+.section.dark .wrap{position:relative;z-index:1}
 .section.dark .eyebrow{color:#7fb0ff}
 .section.dark .eyebrow::before{background:#7fb0ff}
 .section.dark .sh h2{color:#fff}
@@ -279,9 +355,10 @@ img{display:block;max-width:100%}
   border:1px solid var(--line);
 }
 .price-hero::before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 70% at 95% -10%,rgba(26,110,245,.22) 0%,transparent 60%);
+  content:"";position:absolute;inset:-20%;
+  background:radial-gradient(ellipse 60% 55% at 85% 8%,rgba(26,110,245,.24) 0%,transparent 60%);
   pointer-events:none;
+  animation:glowDrift 16s ease-in-out infinite alternate;
 }
 .price-hero>*{position:relative;z-index:1}
 .ph-label{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7fb0ff}
@@ -327,31 +404,35 @@ img{display:block;max-width:100%}
 .cc-title{font-size:clamp(25px,3vw,34px);font-weight:400;letter-spacing:-.015em;line-height:1.12;margin-bottom:12px}
 .cc-title em{font-style:normal;color:var(--blue-ink)}
 .cc-intro{font-family:var(--sans);font-size:14.5px;color:var(--ink-2);line-height:1.6;margin-bottom:28px}
+.cc-slider-group{margin-bottom:24px}
+.cc-slider-group:last-of-type{margin-bottom:0}
 .cc-slider-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:500;color:var(--ink-2);margin-bottom:13px}
 .cc-slider-val{font-weight:700;color:var(--ink);font-size:15px}
-#salaryRange{
+.cc-range{
   -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;
   background:var(--line);outline:none;cursor:pointer;
 }
-#salaryRange::-webkit-slider-thumb{
+.cc-range::-webkit-slider-thumb{
   -webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;
   background:#fff;border:2px solid var(--blue);box-shadow:0 2px 9px rgba(26,110,245,.4);
   cursor:pointer;transition:transform .15s var(--ease);
 }
-#salaryRange::-webkit-slider-thumb:hover{transform:scale(1.14)}
-#salaryRange::-moz-range-thumb{
+.cc-range::-webkit-slider-thumb:hover{transform:scale(1.14)}
+.cc-range::-moz-range-thumb{
   width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--blue);
   box-shadow:0 2px 9px rgba(26,110,245,.4);cursor:pointer;
 }
 .cc-slider-scale{display:flex;justify-content:space-between;margin-top:9px;
   font-family:var(--sans);font-size:12px;color:var(--ink-3)}
+.cc-note{font-family:var(--sans);font-size:12px;color:var(--ink-3);line-height:1.55;margin-top:18px}
 
 .cc-card{
   background:var(--dark);color:#fff;border-radius:var(--r-lg);
   padding:30px 32px;position:relative;overflow:hidden;
 }
-.cc-card::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 75% 60% at 85% -10%,rgba(26,110,245,.28),transparent 62%)}
+.cc-card::before{content:"";position:absolute;inset:-15%;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 85% 5%,rgba(26,110,245,.3),transparent 62%);
+  animation:glowDrift 14s ease-in-out infinite alternate}
 .cc-card>*{position:relative;z-index:1}
 .cc-card-label{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.07em;
   text-transform:uppercase;color:#7fb0ff;margin-bottom:10px}
@@ -370,9 +451,14 @@ img{display:block;max-width:100%}
 /* ── BAND / CTA ──────────────────────────────────────── */
 .band{padding:124px 40px;background:var(--dark);color:#fff;position:relative;overflow:hidden;text-align:center}
 .band::before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 80% at 50% 0%,rgba(26,110,245,.2) 0%,transparent 62%);
+  content:"";position:absolute;inset:-20%;
+  background:radial-gradient(ellipse 50% 60% at 50% 10%,rgba(26,110,245,.22) 0%,transparent 62%);
   pointer-events:none;
+  animation:bandPulse 15s ease-in-out infinite alternate;
+}
+@keyframes bandPulse{
+  from{transform:translate3d(-3%,0,0) scale(1)}
+  to{transform:translate3d(3%,5%,0) scale(1.12)}
 }
 .band-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
 .band-eyebrow{font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7fb0ff;margin-bottom:22px;display:inline-block}
@@ -395,7 +481,8 @@ img{display:block;max-width:100%}
 .ca-card h4{font-family:var(--sans);font-size:15px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
 .ca-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2);font-family:var(--sans);font-size:14.5px;color:var(--ink-2)}
 .ca-list li:last-child{border-bottom:none}
-.ca-dot{color:var(--blue);font-weight:600;flex-shrink:0}
+.ca-dot{color:var(--blue);font-weight:600;flex-shrink:0;transition:transform .25s var(--ease);display:inline-block}
+.ca-list li:hover .ca-dot{transform:translateX(4px)}
 .ca-card p{font-family:var(--sans);font-size:14.5px;color:var(--ink-2);line-height:1.65}
 
 /* ── FOOTER ──────────────────────────────────────────── */
@@ -444,14 +531,22 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
 }
 
 /* ── SCROLL REVEAL ────────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal{opacity:0;transform:translateY(26px);
+  transition:opacity .85s var(--ease),transform .85s var(--ease)}
 .reveal.visible{opacity:1;transform:none}
+.reveal-left{transform:translateX(-32px) translateY(0)}
+.reveal-right{transform:translateX(32px) translateY(0)}
+.reveal-scale{transform:translateY(18px) scale(.96)}
 .reveal-delay-1{transition-delay:.07s}
 .reveal-delay-2{transition-delay:.14s}
 .reveal-delay-3{transition-delay:.21s}
 .reveal-delay-4{transition-delay:.28s}
+
+/* ── REDUCED MOTION: everything off, final state shown ── */
 @media(prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;transition:none}
+  .reveal,.reveal-left,.reveal-right,.reveal-scale{opacity:1;transform:none;transition:none}
+  .hw-i,.hero-brand,.hero-lead,.hero-actions{animation:none;transform:none;opacity:1}
+  .hero-orb,.dark-glow,.band::before,.price-hero::before,.cc-card::before{animation:none}
   html{scroll-behavior:auto}
 }
 
@@ -459,8 +554,11 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
 </head>
 <body>
 
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" aria-hidden="true"><span id="progressBar"></span></div>
+
 <!-- NAV -->
-<div class="nav-outer">
+<div class="nav-outer" id="navOuter">
   <nav class="nav" aria-label="Hauptnavigation">
     <a href="#" class="nav-logo" aria-label="HAUX Facility Management">
       <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -480,9 +578,19 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
 
 <!-- HERO -->
 <section class="hero" aria-labelledby="hero-h1">
+  <div class="hero-orb" data-parallax="0.25" aria-hidden="true"></div>
+  <div class="hero-orb orb-2" data-parallax="-0.15" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-brand">HAUX</div>
-    <h1 id="hero-h1">Ihr Gebäude. <em>Vollständig im Griff.</em></h1>
+    <h1 id="hero-h1">
+      <span class="hw" style="--d:.05s"><span class="hw-i">Ihr</span></span>
+      <span class="hw" style="--d:.13s"><span class="hw-i">Gebäude.</span></span><br>
+      <em>
+        <span class="hw" style="--d:.24s"><span class="hw-i">Vollständig</span></span>
+        <span class="hw" style="--d:.32s"><span class="hw-i">im</span></span>
+        <span class="hw" style="--d:.40s"><span class="hw-i">Griff.</span></span>
+      </em>
+    </h1>
     <p class="hero-lead">
       Zentral gesteuert. Transparent dokumentiert. Wirtschaftlich optimiert.
       Volle Kontrolle — ohne dass Sie sich selbst darum kümmern müssen.
@@ -499,17 +607,17 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
     </div>
   </div>
 
-  <div class="hero-images hero-inner">
-    <div class="hi">
-      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Modernes Bürogebäude" loading="lazy">
+  <div class="hero-images hero-inner" id="heroImages">
+    <div class="hi reveal reveal-delay-1" data-drift="14">
+      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Modernes Bürogebäude" loading="lazy" data-pimg="0.16">
       <div class="hi-label">Gewerbeobjekte & Bürokomplexe</div>
     </div>
-    <div class="hi">
-      <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80" alt="Immobilienverwaltung" loading="lazy">
+    <div class="hi reveal reveal-delay-2" data-drift="-10">
+      <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80" alt="Immobilienverwaltung" loading="lazy" data-pimg="0.24">
       <div class="hi-label">Wohnimmobilien & Anlagen</div>
     </div>
-    <div class="hi">
-      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Modernes Gebäudeinnere" loading="lazy">
+    <div class="hi reveal reveal-delay-3" data-drift="8">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Modernes Gebäudeinnere" loading="lazy" data-pimg="0.12">
       <div class="hi-label">Lobby, Technik & Infrastruktur</div>
     </div>
   </div>
@@ -554,9 +662,9 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
   </div>
 
   <!-- Row 1 -->
-  <div class="feature-row reveal">
-    <div class="feature-visual">
-      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80" alt="Gebäudemanagement vor Ort" loading="lazy">
+  <div class="feature-row">
+    <div class="feature-visual reveal reveal-left">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80" alt="Gebäudemanagement vor Ort" loading="lazy" data-pimg="0.2">
       <div class="feature-visual-title">Steuerung & operatives Management</div>
       <div class="feature-chips">
         <span class="fchip active">Zentrale Steuerung</span>
@@ -565,7 +673,7 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
         <span class="fchip">Störungen</span>
       </div>
     </div>
-    <div class="feature-text">
+    <div class="feature-text reveal reveal-right reveal-delay-1">
       <span class="ft-num">Module 01 – 04</span>
       <h3>Alles läuft — auch wenn Sie nicht da sind.</h3>
       <p class="ft-tagline">Ein Ansprechpartner. Alle Themen. Klare Abläufe.</p>
@@ -580,8 +688,8 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
   </div>
 
   <!-- Row 2 -->
-  <div class="feature-row reverse reveal">
-    <div class="feature-text">
+  <div class="feature-row reverse">
+    <div class="feature-text reveal reveal-left reveal-delay-1">
       <span class="ft-num">Module 05 – 08</span>
       <h3>Sehen, was wirklich passiert.</h3>
       <p class="ft-tagline">Klare Daten. Fundierte Entscheidungen. Minimierte Risiken.</p>
@@ -593,8 +701,8 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
         <div class="ft-item"><div class="ft-check">✓</div><span>Kostenkontrolle: Rechnungsprüfung & Einsparpotenziale</span></div>
       </div>
     </div>
-    <div class="feature-visual">
-      <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=900&q=80" alt="Modernes Wohngebäude" loading="lazy">
+    <div class="feature-visual reveal reveal-right">
+      <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=900&q=80" alt="Modernes Wohngebäude" loading="lazy" data-pimg="0.2">
       <div class="feature-visual-title">Transparenz, Reporting & Risiko</div>
       <div class="feature-chips">
         <span class="fchip">Begehungen</span>
@@ -615,49 +723,49 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
       <p>Objektspezifisch kombinierbar — wir definieren gemeinsam, was Ihr Gebäude braucht.</p>
     </div>
     <div class="modules-grid">
-      <div class="mc reveal reveal-delay-1">
+      <div class="mc reveal reveal-scale reveal-delay-1">
         <div class="mc-num">01</div>
         <h4>Zentrale Gebäude-Steuerung</h4>
         <div class="mc-tagline">Ein Ansprechpartner. Alle Themen.</div>
         <p>Koordination aller Gewerke und externer Dienstleister mit transparenter Priorisierung.</p>
       </div>
-      <div class="mc reveal reveal-delay-2">
+      <div class="mc reveal reveal-scale reveal-delay-2">
         <div class="mc-num">02</div>
         <h4>Dienstleister- & Gewerke-Management</h4>
         <div class="mc-tagline">Qualität sichern. Aufwand reduzieren.</div>
         <p>Angebotseinholung, Qualitätskontrolle, Dokumentation und Eskalation bei Minderleistung.</p>
       </div>
-      <div class="mc reveal reveal-delay-3">
+      <div class="mc reveal reveal-scale reveal-delay-3">
         <div class="mc-num">03</div>
         <h4>Wartungs- & Prüfmanagement</h4>
         <div class="mc-tagline">Termine nie verpassen. Pflichten erfüllen.</div>
         <p>Prüfkalender für Brandschutz, Aufzug, Elektro, Heizung und Lüftung. Lückenlose Protokollablage.</p>
       </div>
-      <div class="mc reveal reveal-delay-4">
+      <div class="mc reveal reveal-scale reveal-delay-4">
         <div class="mc-num">04</div>
         <h4>Ticket- & Störungsmanagement</h4>
         <div class="mc-tagline">Keine verlorenen Vorgänge.</div>
         <p>Zentrale Störungserfassung, Behebungskoordination und Überwachung der Reaktionszeiten.</p>
       </div>
-      <div class="mc reveal reveal-delay-1">
+      <div class="mc reveal reveal-scale reveal-delay-1">
         <div class="mc-num">05</div>
         <h4>Objektbegehungen & Qualitätskontrolle</h4>
         <div class="mc-tagline">Proaktiv statt reaktiv.</div>
         <p>Regelmäßige Begehungen mit Fotodokumentation und frühzeitiger Risikoidentifikation.</p>
       </div>
-      <div class="mc reveal reveal-delay-2">
+      <div class="mc reveal reveal-scale reveal-delay-2">
         <div class="mc-num">06</div>
         <h4>Monatsreport & Transparenz</h4>
         <div class="mc-tagline">Klare Daten. Fundierte Entscheidungen.</div>
         <p>Verdichteter Report mit Leistungsübersicht, Ticketstatus, Kosten und Dienstleisterbewertung.</p>
       </div>
-      <div class="mc reveal reveal-delay-3">
+      <div class="mc reveal reveal-scale reveal-delay-3">
         <div class="mc-num">07</div>
         <h4>Betreiberpflichten- & Risikomanagement</h4>
         <div class="mc-tagline">Haftungsrisiken systematisch minimieren.</div>
         <p>Gesetzliche Anforderungen, Nachweisdokumentation und frühzeitige Eskalation kritischer Sachverhalte.</p>
       </div>
-      <div class="mc reveal reveal-delay-4">
+      <div class="mc reveal reveal-scale reveal-delay-4">
         <div class="mc-num">08</div>
         <h4>Kostenkontrolle & Optimierung</h4>
         <div class="mc-tagline">Wirtschaftlich. Nachvollziehbar.</div>
@@ -669,21 +777,22 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
 
 <!-- INTERVALLE -->
 <section id="intervalle" class="section dark" aria-labelledby="int-h">
+  <div class="dark-glow" aria-hidden="true"></div>
   <div class="wrap">
     <div class="sh reveal">
       <div class="eyebrow">Leistungsintervalle</div>
       <h2 id="int-h">Strukturiert. Planbar. Verlässlich.</h2>
       <p>Jede Leistung mit definierten Intervallen — damit nichts vergessen wird und Sie immer wissen, was wann passiert.</p>
     </div>
-    <table class="int-table reveal" aria-label="Leistungsintervalle">
-      <thead>
+    <table class="int-table" aria-label="Leistungsintervalle">
+      <thead class="reveal">
         <tr>
           <th scope="col" style="width:36%">Leistung</th>
           <th scope="col" style="width:20%">Intervall</th>
           <th scope="col">Beispielhafte Ausprägung</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="intBody">
         <tr class="int-row"><td>Monatsreport & Statusreview</td><td><span class="badge b-blue">Monatlich</span></td><td>Report mit Leistungsübersicht, Ticketstatus und Empfehlungen</td></tr>
         <tr class="int-row"><td>Objektbegehung</td><td><span class="badge b-blue">Monatlich</span></td><td>Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste</td></tr>
         <tr class="int-row"><td>Wartungs- & Prüfmonitoring</td><td><span class="badge b-green">Laufend</span></td><td>Fristenkontrolle und Nachverfolgung aller Wartungs- und Prüftermine</td></tr>
@@ -704,10 +813,10 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
       <p>Wir kalkulieren objektspezifisch — kein starres Paket, sondern exakt das, was Ihr Gebäude braucht.</p>
     </div>
     <div class="pricing-layout">
-      <div class="price-hero reveal">
+      <div class="price-hero reveal reveal-left">
         <div class="ph-label">Monatliche Managementpauschale</div>
         <div>
-          <div class="ph-amount"><sup>ab</sup>899 €<span class="period">/Monat</span></div>
+          <div class="ph-amount"><sup>ab</sup>499 €<span class="period">/Monat</span></div>
           <p class="ph-sub">Vollständiges Gebäudemanagement — objektspezifisch kalkuliert. Begehung und Report inklusive.</p>
         </div>
         <div class="ph-includes">
@@ -722,18 +831,18 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
-      <div class="price-cards reveal reveal-delay-1">
-        <div class="pc">
+      <div class="price-cards">
+        <div class="pc reveal reveal-right reveal-delay-1">
           <div class="pc-label">Inkludiert</div>
           <div class="pc-value ok">Objektbegehung</div>
           <p>Regelmäßige Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste — im Preis enthalten.</p>
         </div>
-        <div class="pc">
+        <div class="pc reveal reveal-right reveal-delay-2">
           <div class="pc-label">Inkludiert</div>
           <div class="pc-value ok">Monatsreport</div>
           <p>Verdichteter Report mit Leistungsübersicht, Status und konkreten Handlungsempfehlungen.</p>
         </div>
-        <div class="pc">
+        <div class="pc reveal reveal-right reveal-delay-3">
           <div class="pc-label">Nach Bedarf</div>
           <div class="pc-value amber">Sonderthemen</div>
           <p>Individuelle Zusatzleistungen werden nach Beauftragung und Absprache nach Aufwand abgerechnet.</p>
@@ -777,28 +886,35 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
       </div>
     </div>
 
-    <!-- COST COMPARISON -->
-    <div class="cost-compare reveal">
-      <div class="cc-left">
+    <!-- COST COMPARISON: Eigenregie vs. HAUX -->
+    <div class="cost-compare">
+      <div class="cc-left reveal reveal-left">
         <div class="eyebrow">Rechnen Sie nach</div>
-        <h3 class="cc-title">Günstiger als ein <em>eigener Hausmeister</em>.</h3>
-        <p class="cc-intro">Ein fest angestellter Hausmeister kostet weit mehr als sein Bruttogehalt — Sozialabgaben, Arbeitsplatz und Ausfallzeiten kommen obendrauf.</p>
-        <label class="cc-slider-label" for="salaryRange">Bruttogehalt Hausmeister: <span class="cc-slider-val" id="salaryOut">2.900 €</span> / Monat</label>
-        <input type="range" id="salaryRange" min="2400" max="4000" step="100" value="2900" aria-label="Bruttogehalt Hausmeister pro Monat" />
-        <div class="cc-slider-scale"><span>2.400 €</span><span>4.000 €</span></div>
+        <h3 class="cc-title">Was kostet Sie die <em>Eigenregie</em>?</h3>
+        <p class="cc-intro">Gebäudethemen koordinieren sich nicht von selbst: Dienstleister steuern, Termine nachhalten, Störungen managen, alles dokumentieren. Diese Stunden zahlen Sie heute schon — mit Ihrer Zeit oder der Ihrer Verwaltung.</p>
+        <div class="cc-slider-group">
+          <label class="cc-slider-label" for="hoursRange">Zeitaufwand für Gebäudethemen: <span class="cc-slider-val" id="hoursOut">15 h</span> / Monat</label>
+          <input type="range" class="cc-range" id="hoursRange" min="5" max="40" step="1" value="15" aria-label="Zeitaufwand für Gebäudethemen in Stunden pro Monat" />
+          <div class="cc-slider-scale"><span>5 h</span><span>40 h</span></div>
+        </div>
+        <div class="cc-slider-group">
+          <label class="cc-slider-label" for="rateRange">Interner Stundensatz: <span class="cc-slider-val" id="rateOut">65 €</span> / Stunde</label>
+          <input type="range" class="cc-range" id="rateRange" min="40" max="120" step="5" value="65" aria-label="Interner Stundensatz in Euro pro Stunde" />
+          <div class="cc-slider-scale"><span>40 €</span><span>120 €</span></div>
+        </div>
       </div>
 
-      <div class="cc-card">
-        <div class="cc-card-label">Sie sparen mit HAUX</div>
-        <div class="cc-card-amount"><span id="savMonth">3.390 €</span><small>/ Monat</small></div>
+      <div class="cc-card reveal reveal-right" id="ccCard">
+        <div class="cc-card-label">Ihre Eigenregie kostet</div>
+        <div class="cc-card-amount"><span id="ownCost">975 €</span><small>/ Monat</small></div>
         <div class="cc-card-rows">
-          <div class="cc-card-row"><span>Bruttogehalt</span><span id="brkGross">2.900 €</span></div>
-          <div class="cc-card-row"><span>Sozialabgaben (≈ 21 %)</span><span id="brkSV">609 €</span></div>
-          <div class="cc-card-row"><span>Arbeitsplatz &amp; Ausfallzeiten</span><span id="brkOh">780 €</span></div>
-          <div class="cc-card-row cc-card-row-total"><span>Arbeitgeberkosten</span><span id="brkTotal">4.289 €</span></div>
-          <div class="cc-card-row cc-card-row-haux"><span>HAUX Facility Management</span><span id="hauxAmount">899 €</span></div>
+          <div class="cc-card-row"><span>Koordinationsaufwand</span><span id="brkHours">15 h / Monat</span></div>
+          <div class="cc-card-row"><span>Interner Stundensatz</span><span id="brkRate">65 € / h</span></div>
+          <div class="cc-card-row cc-card-row-total"><span>Kosten Eigenregie</span><span id="brkTotal">975 €</span></div>
+          <div class="cc-card-row cc-card-row-haux"><span>HAUX Managementpauschale</span><span id="hauxAmount">ab 499 €</span></div>
         </div>
-        <div class="cc-card-foot"><span id="savYear">40.680 €</span> Ersparnis pro Jahr</div>
+        <div class="cc-card-foot" id="ccFoot"><span id="savYear">5.712 €</span> Entlastung pro Jahr — und <span id="hrsYear">180 Stunden</span> zurück für Ihr Kerngeschäft</div>
+        <p class="cc-note" style="color:rgba(255,255,255,.38)">Beispielhafte Modellrechnung. Der tatsächliche Aufwand wird objektspezifisch ermittelt.</p>
       </div>
     </div>
   </div>
@@ -820,7 +936,7 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
 <!-- CONTACT -->
 <section id="kontakt" class="section alt" aria-labelledby="contact-h">
   <div class="contact-grid">
-    <div class="contact-card reveal">
+    <div class="contact-card reveal reveal-left">
       <div class="eyebrow">Kontakt</div>
       <h2 id="contact-h">Sprechen Sie mit uns.</h2>
       <p>Wir stellen Ihnen den Leistungsumfang gerne objektspezifisch zusammen und passen Intervalle, Reportingtiefe und Module an Ihre Anforderungen an.</p>
@@ -833,7 +949,7 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
         <div class="cc-row"><div class="cc-ic">⏱</div><span>Antwort in der Regel innerhalb von 24 Stunden</span></div>
       </div>
     </div>
-    <div class="contact-aside reveal reveal-delay-1">
+    <div class="contact-aside reveal reveal-right reveal-delay-1">
       <div class="ca-card">
         <h4>Was Sie uns mitteilen können</h4>
         <ul class="ca-list">
@@ -878,65 +994,185 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
       </nav>
     </div>
     <div class="foot-bottom">
-      <div class="foot-copy">© 2025 HAUX Facility Management — Alle Rechte vorbehalten</div>
+      <div class="foot-copy">© 2026 HAUX Facility Management — Alle Rechte vorbehalten</div>
       <div class="foot-mail"><a href="mailto:info@hauxfacility.de">info@hauxfacility.de</a></div>
     </div>
   </div>
 </footer>
 
 <script>
-// Smooth scroll
+(function(){
+'use strict';
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── Smooth scroll for anchors ─────────────────────────── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const id = a.getAttribute('href');
     if(id === '#') return;
     const t = document.querySelector(id);
-    if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior: REDUCED ? 'auto' : 'smooth', block:'start'}); }
   });
 });
 
-// Scroll reveal
-const io = new IntersectionObserver(entries => {
-  entries.forEach(el => {
-    if(el.isIntersecting){ el.target.classList.add('visible'); io.unobserve(el.target); }
+/* ── Scroll progress bar + nav state ───────────────────── */
+const bar = document.getElementById('progressBar');
+const navOuter = document.getElementById('navOuter');
+let scrollTick = false;
+function onScroll(){
+  if(scrollTick) return;
+  scrollTick = true;
+  requestAnimationFrame(() => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? (scrollY / max) : 0) + ')';
+    navOuter.classList.toggle('scrolled', scrollY > 24);
+    scrollTick = false;
   });
-}, {threshold: 0.08, rootMargin:'0px 0px -40px 0px'});
+}
+addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+/* ── Scroll reveal (staggered) ─────────────────────────── */
+// Table rows get reveal classes with computed stagger
+document.querySelectorAll('#intBody .int-row').forEach((r, i) => {
+  r.classList.add('reveal');
+  r.style.transitionDelay = (i * 70) + 'ms';
+});
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if(en.isIntersecting){ en.target.classList.add('visible'); io.unobserve(en.target); }
+  });
+}, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// Cost comparison calculator
+/* ── Parallax engine (scroll + cursor drift, transform-only, lerped) ── */
+if(!REDUCED){
+  // scroll parallax: decorative layers ([data-parallax]) + images inside masks ([data-pimg])
+  const layers = [];
+  document.querySelectorAll('[data-parallax]').forEach(el => {
+    layers.push({el, s: parseFloat(el.getAttribute('data-parallax')) || .1, cur: 0, img:false});
+  });
+  document.querySelectorAll('[data-pimg]').forEach(el => {
+    layers.push({el, s: parseFloat(el.getAttribute('data-pimg')) || .15, cur: 0, img:true});
+  });
+
+  // cursor drift for the hero image rig
+  const heroWrap = document.getElementById('heroImages');
+  const drifts = [];
+  if(heroWrap && window.matchMedia('(pointer:fine)').matches){
+    heroWrap.querySelectorAll('[data-drift]').forEach(el => {
+      drifts.push({el, f: parseFloat(el.getAttribute('data-drift')) || 10, x:0, y:0, tx:0, ty:0});
+    });
+    heroWrap.addEventListener('mousemove', e => {
+      const r = heroWrap.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width  - .5;
+      const ny = (e.clientY - r.top)  / r.height - .5;
+      drifts.forEach(d => { d.tx = nx * d.f; d.ty = ny * d.f; });
+    });
+    heroWrap.addEventListener('mouseleave', () => {
+      drifts.forEach(d => { d.tx = 0; d.ty = 0; });
+    });
+  }
+
+  function frame(){
+    const vh = innerHeight;
+    for(const p of layers){
+      const host = p.img ? p.el.parentElement : p.el;
+      const r = host.getBoundingClientRect();
+      if(r.bottom < -80 || r.top > vh + 80){ /* offscreen: skip */ }
+      else{
+        const prog = (r.top + r.height / 2 - vh / 2) / vh;   // ≈ -1 … 1
+        const target = -prog * p.s * 100;                    // px
+        p.cur += (target - p.cur) * .1;
+        p.el.style.transform = p.img
+          ? 'translate3d(0,' + p.cur.toFixed(2) + 'px,0) scale(1.14)'
+          : 'translate3d(0,' + p.cur.toFixed(2) + 'px,0)';
+      }
+    }
+    for(const d of drifts){
+      d.x += (d.tx - d.x) * .08;
+      d.y += (d.ty - d.y) * .08;
+      d.el.style.translate = d.x.toFixed(2) + 'px ' + d.y.toFixed(2) + 'px';
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ── Eigenregie-Rechner + count-up ─────────────────────── */
 (function(){
-  const range = document.getElementById('salaryRange');
-  if(!range) return;
-  const HAUX = 899, OVERHEAD = 780, SV_RATE = 0.21;
+  const hoursR = document.getElementById('hoursRange');
+  const rateR  = document.getElementById('rateRange');
+  if(!hoursR || !rateR) return;
+  const HAUX = 499;
   const fmt = n => Math.round(n).toLocaleString('de-DE') + ' €';
   const $ = id => document.getElementById(id);
   const el = {
-    salaryOut:$('salaryOut'), hauxAmount:$('hauxAmount'),
-    brkGross:$('brkGross'), brkSV:$('brkSV'), brkOh:$('brkOh'),
-    brkTotal:$('brkTotal'), savMonth:$('savMonth'), savYear:$('savYear')
+    hoursOut:$('hoursOut'), rateOut:$('rateOut'), ownCost:$('ownCost'),
+    brkHours:$('brkHours'), brkRate:$('brkRate'), brkTotal:$('brkTotal'),
+    hauxAmount:$('hauxAmount'), foot:$('ccFoot')
   };
 
-  function render(){
-    const g = +range.value;
-    const sv = g * SV_RATE;
-    const total = g + sv + OVERHEAD;
-    const savM = total - HAUX;
-    const pct = (g - range.min) / (range.max - range.min) * 100;
+  function fill(range){
+    const pct = (range.value - range.min) / (range.max - range.min) * 100;
     range.style.background =
-      `linear-gradient(90deg,var(--blue) 0%,var(--blue) ${pct}%,var(--line) ${pct}%,var(--line) 100%)`;
-    el.salaryOut.textContent = fmt(g);
-    el.brkGross.textContent  = fmt(g);
-    el.brkSV.textContent     = fmt(sv);
-    el.brkOh.textContent     = fmt(OVERHEAD);
-    el.brkTotal.textContent  = fmt(total);
-    el.hauxAmount.textContent= fmt(HAUX);
-    el.savMonth.textContent  = fmt(savM);
-    el.savYear.textContent   = fmt(savM * 12);
+      'linear-gradient(90deg,var(--blue) 0%,var(--blue) ' + pct + '%,var(--line) ' + pct + '%,var(--line) 100%)';
   }
 
-  range.addEventListener('input', render);
-  range.addEventListener('wheel', e => e.preventDefault(), {passive:false});
-  render();
+  function compute(){
+    const h = +hoursR.value, r = +rateR.value;
+    const cost = h * r;
+    const diff = cost - HAUX;
+    return {h, r, cost, diff};
+  }
+
+  function paint(v, f){                      // f = count-up factor 0…1
+    if(f === undefined) f = 1;
+    fill(hoursR); fill(rateR);
+    el.hoursOut.textContent  = v.h + ' h';
+    el.rateOut.textContent   = fmt(v.r);
+    el.ownCost.textContent   = fmt(v.cost * f);
+    el.brkHours.textContent  = Math.round(v.h * f) + ' h / Monat';
+    el.brkRate.textContent   = fmt(v.r * f) + ' / h';
+    el.brkTotal.textContent  = fmt(v.cost * f);
+    el.hauxAmount.textContent= 'ab ' + fmt(HAUX * f);
+    if(v.diff > 0){
+      el.foot.innerHTML = '<span>' + fmt(v.diff * 12 * f) + '</span> Entlastung pro Jahr — und <span>'
+        + Math.round(v.h * 12 * f) + ' Stunden</span> zurück für Ihr Kerngeschäft';
+    } else {
+      el.foot.innerHTML = '<span>' + Math.round(v.h * 12 * f)
+        + ' Stunden</span> pro Jahr zurück für Ihr Kerngeschäft — professionell gesteuert und dokumentiert';
+    }
+  }
+
+  [hoursR, rateR].forEach(rg => {
+    rg.addEventListener('input', () => paint(compute()));
+    rg.addEventListener('wheel', e => e.preventDefault(), {passive:false});
+  });
+  paint(compute());
+
+  // count-up when the savings card first scrolls into view
+  const card = document.getElementById('ccCard');
+  if(card && !REDUCED){
+    let played = false;
+    const cio = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if(en.isIntersecting && !played){
+          played = true;
+          cio.unobserve(card);
+          const t0 = performance.now(), DUR = 1300;
+          (function tick(now){
+            const t = Math.min((now - t0) / DUR, 1);
+            const e = 1 - Math.pow(1 - t, 3);           // easeOutCubic
+            paint(compute(), e);
+            if(t < 1) requestAnimationFrame(tick);
+          })(t0);
+        }
+      });
+    }, {threshold: 0.4});
+    cio.observe(card);
+  }
+})();
 })();
 </script>
 </body>
