@@ -347,7 +347,7 @@ section[id]{scroll-margin-top:76px}
 /* ── PRICING ─────────────────────────────────────────── */
 .pricing-layout{
   max-width:var(--max);margin:0 auto;
-  display:grid;grid-template-columns:1fr;gap:24px;
+  display:grid;grid-template-columns:1.18fr 1fr;gap:24px;
 }
 .price-hero{
   background:var(--dark);border-radius:var(--r-lg);padding:46px;color:#fff;
@@ -372,6 +372,14 @@ section[id]{scroll-margin-top:76px}
 .ph-cta{align-self:flex-start;background:var(--blue);color:#fff}
 .ph-cta:hover{background:var(--blue-d);transform:translateY(-1px)}
 
+.price-cards{display:flex;flex-direction:column;gap:16px}
+.pc{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:24px 22px;transition:border-color .2s,box-shadow .2s,transform .2s var(--ease)}
+.pc:hover{border-color:rgba(26,110,245,.28);box-shadow:0 8px 26px rgba(26,25,21,.06);transform:translateY(-2px)}
+.pc-label{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.pc-value{font-family:var(--serif);font-size:23px;color:var(--ink);margin-bottom:8px}
+.pc-value.ok{color:#0a7d57}
+.pc-value.amber{color:#9a6512}
+.pc p{font-family:var(--sans);font-size:13.5px;color:var(--ink-2);line-height:1.6}
 .pricing-note{
   max-width:var(--max);margin:24px auto 0;background:var(--paper-2);
   border:1px solid var(--line);border-radius:var(--r);padding:18px 22px;
@@ -497,6 +505,7 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
   .feature-row{grid-template-columns:1fr;gap:36px}
   .feature-row.reverse .feature-visual{order:0}
   .modules-grid{grid-template-columns:repeat(2,1fr)}
+  .pricing-layout{grid-template-columns:1fr}
   .benefits-grid{grid-template-columns:repeat(2,1fr)}
   .contact-grid{grid-template-columns:1fr}
   .cost-compare{grid-template-columns:1fr;gap:30px}
@@ -785,7 +794,7 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
       </thead>
       <tbody id="intBody">
         <tr class="int-row"><td>Monatsreport & Statusreview</td><td><span class="badge b-blue">Monatlich</span></td><td>Report mit Leistungsübersicht, Ticketstatus und Empfehlungen</td></tr>
-        <tr class="int-row"><td>Objektbegehung</td><td><span class="badge b-blue">Wöchentlich</span></td><td>Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste</td></tr>
+        <tr class="int-row"><td>Objektbegehung</td><td><span class="badge b-blue">Monatlich</span></td><td>Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste</td></tr>
         <tr class="int-row"><td>Wartungs- & Prüfmonitoring</td><td><span class="badge b-green">Laufend</span></td><td>Fristenkontrolle und Nachverfolgung aller Wartungs- und Prüftermine</td></tr>
         <tr class="int-row"><td>Dienstleisterreview</td><td><span class="badge b-amber">Quartalsweise</span></td><td>Bewertung Qualität, Preis-Leistung und Zuverlässigkeit</td></tr>
         <tr class="int-row"><td>Kosten- & Maßnahmenreview</td><td><span class="badge b-amber">Quartalsweise</span></td><td>Analyse Kostentreiber, Einsparpotenziale, geplante Maßnahmen</td></tr>
@@ -812,7 +821,7 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
         </div>
         <div class="ph-includes">
           <div class="ph-row"><div class="ph-tick">✓</div>Alle 8 Leistungsmodule nach Vereinbarung</div>
-          <div class="ph-row"><div class="ph-tick">✓</div>Wöchentliche Objektbegehung mit Fotodokumentation</div>
+          <div class="ph-row"><div class="ph-tick">✓</div>Monatliche Objektbegehung mit Fotodokumentation</div>
           <div class="ph-row"><div class="ph-tick">✓</div>Monatlicher Management-Report</div>
           <div class="ph-row"><div class="ph-tick">✓</div>SLA-definierte Reaktionszeiten</div>
           <div class="ph-row"><div class="ph-tick">✓</div>Zentraler Ansprechpartner für alle Themen</div>
@@ -821,6 +830,23 @@ footer{background:var(--dark);color:#fff;padding:54px 40px 36px}
           Angebot anfordern
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
+      </div>
+      <div class="price-cards">
+        <div class="pc reveal reveal-right reveal-delay-1">
+          <div class="pc-label">Inkludiert</div>
+          <div class="pc-value ok">Objektbegehung</div>
+          <p>Regelmäßige Vor-Ort-Prüfung mit Fotodokumentation und Maßnahmenliste — im Preis enthalten.</p>
+        </div>
+        <div class="pc reveal reveal-right reveal-delay-2">
+          <div class="pc-label">Inkludiert</div>
+          <div class="pc-value ok">Monatsreport</div>
+          <p>Verdichteter Report mit Leistungsübersicht, Status und konkreten Handlungsempfehlungen.</p>
+        </div>
+        <div class="pc reveal reveal-right reveal-delay-3">
+          <div class="pc-label">Nach Bedarf</div>
+          <div class="pc-value amber">Sonderthemen</div>
+          <p>Individuelle Zusatzleistungen werden nach Beauftragung und Absprache nach Aufwand abgerechnet.</p>
+        </div>
       </div>
     </div>
     <p class="pricing-note reveal">
@@ -1146,6 +1172,7 @@ if(!REDUCED){
     }, {threshold: 0.4});
     cio.observe(card);
   }
+})();
 })();
 </script>
 </body>
